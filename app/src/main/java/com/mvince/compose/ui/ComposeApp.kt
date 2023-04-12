@@ -8,6 +8,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.mvince.compose.ui.details.DetailsScreen
+import com.mvince.compose.ui.forgotPassword.ForgotPasswordScreen
+import com.mvince.compose.ui.login.LoginScreen
+import com.mvince.compose.ui.register.RegisterScreen
 import com.mvince.compose.ui.users.UsersScreen
 
 @Composable
@@ -15,9 +18,12 @@ fun ComposeApp() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Route.USER
+        startDestination = Route.LOGIN
     ) {
-        composable(Route.USER) { backStackEntry ->
+        composable(route = Route.LOGIN) { LoginScreen(navController) }
+        composable(route = Route.REGISTER) { RegisterScreen(navController) }
+        composable(route = Route.FORGOTPASSWORD) { ForgotPasswordScreen(navController) }
+        composable(route = Route.USER) { backStackEntry ->
             UsersScreen(
                 onUserClick = { username ->
                     // In order to discard duplicated navigation events, we check the Lifecycle
@@ -43,6 +49,9 @@ fun ComposeApp() {
 object Route {
     const val USER = "user"
     const val DETAIL = "detail"
+    const val LOGIN = "login"
+    const val REGISTER = "register"
+    const val FORGOTPASSWORD = "forgotPassword"
 }
 
 object Argument {
