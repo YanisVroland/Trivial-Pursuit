@@ -10,7 +10,7 @@ import androidx.navigation.navArgument
 import com.mvince.compose.ui.details.DetailsScreen
 import com.mvince.compose.ui.forgotPassword.ForgotPasswordScreen
 import com.mvince.compose.ui.login.LoginScreen
-import com.mvince.compose.ui.register.RegisterScreen
+import com.mvince.compose.ui.signup.SignupScreen
 import com.mvince.compose.ui.users.UsersScreen
 
 @Composable
@@ -21,7 +21,7 @@ fun ComposeApp() {
         startDestination = Route.LOGIN
     ) {
         composable(route = Route.LOGIN) { LoginScreen(navController) }
-        composable(route = Route.REGISTER) { RegisterScreen(navController) }
+        composable(route = Route.REGISTER) { SignupScreen(navController) }
         composable(route = Route.FORGOTPASSWORD) { ForgotPasswordScreen(navController) }
         composable(route = Route.USER) { backStackEntry ->
             UsersScreen(

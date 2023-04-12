@@ -26,7 +26,7 @@ import com.mvince.compose.R
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(navController: NavHostController) {
+fun SignupScreen(navController: NavHostController) {
     val viewModel = hiltViewModel<SignupViewModel>()
 
     var email by remember { mutableStateOf("") }
