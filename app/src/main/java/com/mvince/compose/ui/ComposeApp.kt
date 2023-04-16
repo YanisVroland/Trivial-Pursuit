@@ -9,7 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.mvince.compose.ui.details.DetailsScreen
 import com.mvince.compose.ui.forgotPassword.ForgotPasswordScreen
-import com.mvince.compose.ui.login.LoginScreen
+import com.mvince.compose.ui.signin.LoginScreen
 import com.mvince.compose.ui.signup.SignupScreen
 import com.mvince.compose.ui.users.UsersScreen
 

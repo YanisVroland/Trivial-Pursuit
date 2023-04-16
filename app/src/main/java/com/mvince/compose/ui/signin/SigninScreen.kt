@@ -1,4 +1,4 @@
-package com.mvince.compose.ui.login
+package com.mvince.compose.ui.signin
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
@@ -8,7 +8,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -25,7 +24,6 @@ import com.mvince.compose.ui.components.CustomOutlinedTextField
 import com.mvince.compose.R
 import com.mvince.compose.ui.Route
 import androidx.navigation.NavHostController
-import com.mvince.compose.ui.components.NoNetwork
 import com.mvince.compose.ui.theme.linkColor
 
 
@@ -33,8 +31,13 @@ import com.mvince.compose.ui.theme.linkColor
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun LoginScreen(navController: NavHostController) {
-    val viewModel = hiltViewModel<LoginViewModel>()
-    val uiState = viewModel.uiState.collectAsState().value
+    val viewModel = hiltViewModel<SigninViewModel>()
+
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var showPassword by remember { mutableStateOf(false) }
+
+    val authResource = viewModel.signupFlow.collectAsState()
 
     Scaffold(
         topBar = {
@@ -48,9 +51,6 @@ fun LoginScreen(navController: NavHostController) {
             )
         },
     ) {
-        if (uiState.offline) {
-            NoNetwork()
-        } else {
             Column(
                 Modifier
                     .fillMaxSize()
@@ -70,27 +70,27 @@ fun LoginScreen(navController: NavHostController) {
                 Spacer(modifier = Modifier.height(64.dp))
 
                 CustomOutlinedTextField(
-                    value = uiState.email,
-                    onValueChange = { uiState.email = it },
+                    value = email,
+                    onValueChange = { email = it },
                     label = { Text(text = "Mail") },
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 CustomOutlinedTextField(
-                    value = uiState.password,
-                    onValueChange = { uiState.password = it },
+                    value = password,
+                    onValueChange = { password = it },
                     label = { Text(text = "Mot de passe") },
-                    visualTransformation = if (uiState.showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                    visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
                         IconButton(
-                            onClick = { uiState.showPassword = !uiState.showPassword }
+                            onClick = { showPassword = !showPassword }
                         ) {
                             Icon(
-                                painter = if (uiState.showPassword) painterResource(id = R.drawable.visibility) else painterResource(
+                                painter = if (showPassword) painterResource(id = R.drawable.visibility) else painterResource(
                                     id = R.drawable.visibility_off
                                 ),
-                                contentDescription = if (uiState.showPassword) "Hide password" else "Show password",
+                                contentDescription = if (showPassword) "Hide password" else "Show password",
                             )
 
                         }
@@ -117,9 +117,7 @@ fun LoginScreen(navController: NavHostController) {
 
                 CustomButton(
                     title = "Valider",
-                    onClick = {
-                        navController.navigate(Route.FORGOTPASSWORD)
-                    },
+                    onClick = { viewModel.loginUser(email, password) },
                     modifier = Modifier.fillMaxWidth(),
                 )
 
@@ -139,6 +137,5 @@ fun LoginScreen(navController: NavHostController) {
                 )
 
             }
-        }
     }
 }

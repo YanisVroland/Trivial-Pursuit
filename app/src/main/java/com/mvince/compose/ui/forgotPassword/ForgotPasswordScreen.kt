@@ -27,7 +27,9 @@ import com.mvince.compose.ui.components.NoNetwork
 @Composable
 fun ForgotPasswordScreen(navController: NavHostController) {
     val viewModel = hiltViewModel<ForgotPasswordViewModel>()
-    val uiState = viewModel.uiState.collectAsState().value
+    var email by remember { mutableStateOf("") }
+
+    val boolResource = viewModel.resetPasswordFlow.collectAsState()
 
     Scaffold(topBar = {
         TopAppBar(title = { Text(text = "Test APP") }, navigationIcon = {
@@ -37,9 +39,6 @@ fun ForgotPasswordScreen(navController: NavHostController) {
         })
     }
     ) {
-        if (uiState.offline) {
-            NoNetwork()
-        } else {
             Column(
                 Modifier
                     .fillMaxSize()
@@ -56,8 +55,8 @@ fun ForgotPasswordScreen(navController: NavHostController) {
                 )
                 Spacer(modifier = Modifier.height(64.dp))
                 CustomOutlinedTextField(
-                    value = uiState.email,
-                    onValueChange = { uiState.email = it },
+                    value = email,
+                    onValueChange = { email = it },
                     label = { Text(text = "Mail") },
                 )
                 Spacer(modifier = Modifier.height(64.dp))
@@ -68,7 +67,6 @@ fun ForgotPasswordScreen(navController: NavHostController) {
                 )
 
             }
-        }
     }
 
 }
