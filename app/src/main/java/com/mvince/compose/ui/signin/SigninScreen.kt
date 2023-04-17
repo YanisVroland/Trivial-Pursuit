@@ -51,91 +51,100 @@ fun LoginScreen(navController: NavHostController) {
             )
         },
     ) {
-            Column(
-                Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
 
-                Text(
-                    "Connexion", style = TextStyle(
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily.SansSerif
-                    )
+            Text(
+                "Connexion", style = TextStyle(
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.SansSerif
                 )
+            )
 
-                Spacer(modifier = Modifier.height(64.dp))
+            Spacer(modifier = Modifier.height(64.dp))
 
-                CustomOutlinedTextField(
-                    value = email,
-                    onValueChange = { email = it },
-                    label = { Text(text = "Mail") },
-                )
+            CustomOutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text(text = "Mail") },
+            )
 
-                Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-                CustomOutlinedTextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    label = { Text(text = "Mot de passe") },
-                    visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
-                    trailingIcon = {
-                        IconButton(
-                            onClick = { showPassword = !showPassword }
-                        ) {
-                            Icon(
-                                painter = if (showPassword) painterResource(id = R.drawable.visibility) else painterResource(
-                                    id = R.drawable.visibility_off
-                                ),
-                                contentDescription = if (showPassword) "Hide password" else "Show password",
-                            )
+            CustomOutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text(text = "Mot de passe") },
+                visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                trailingIcon = {
+                    IconButton(
+                        onClick = { showPassword = !showPassword }
+                    ) {
+                        Icon(
+                            painter = if (showPassword) painterResource(id = R.drawable.visibility) else painterResource(
+                                id = R.drawable.visibility_off
+                            ),
+                            contentDescription = if (showPassword) "Hide password" else "Show password",
+                        )
 
-                        }
                     }
-                )
+                }
+            )
 
-                Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-                ClickableText(
-                    text = AnnotatedString("Mot de passe oublié ?"),
-                    onClick = {
-                        navController.navigate(Route.FORGOTPASSWORD)
-                    },
-                    style = TextStyle(
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium,
-                        fontFamily = FontFamily.SansSerif,
-                        color = linkColor
-                    ),
-                    modifier = Modifier.align(Alignment.End)
-                )
+            ClickableText(
+                text = AnnotatedString("Mot de passe oublié ?"),
+                onClick = {
+                    navController.navigate(Route.FORGOTPASSWORD)
+                },
+                style = TextStyle(
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = FontFamily.SansSerif,
+                    color = linkColor
+                ),
+                modifier = Modifier.align(Alignment.End)
+            )
 
-                Spacer(modifier = Modifier.height(64.dp))
+            Spacer(modifier = Modifier.height(64.dp))
 
-                CustomButton(
-                    title = "Valider",
-                    onClick = { viewModel.loginUser(email, password) },
-                    modifier = Modifier.fillMaxWidth(),
-                )
+            CustomButton(
+                title = "Valider",
+                onClick = {
+                    viewModel.loginUser(email, password)
+                    println(authResource)
 
-                Spacer(modifier = Modifier.height(32.dp))
+                   if (authResource != null) {
+                        navController.navigate(Route.USER)
+                    } else {
+                        //   navController.navigate(Route.LOGIN)
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+            )
 
-                ClickableText(
-                    text = AnnotatedString("S'inscrire ?"),
-                    onClick = {
-                        navController.navigate(Route.REGISTER)
-                    },
-                    style = TextStyle(
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium,
-                        fontFamily = FontFamily.SansSerif,
-                        color = linkColor
-                    ),
-                )
+            Spacer(modifier = Modifier.height(32.dp))
 
-            }
+            ClickableText(
+                text = AnnotatedString("S'inscrire ?"),
+                onClick = {
+                    navController.navigate(Route.REGISTER)
+                },
+                style = TextStyle(
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = FontFamily.SansSerif,
+                    color = linkColor
+                ),
+            )
+
+        }
     }
 }
