@@ -40,8 +40,6 @@ fun LoginScreen(navController: NavHostController) {
     val authResource = viewModel.signinFlow.collectAsState().value
     if (authResource != null) {
         navController.navigate(Route.USER)
-    } else{
-        println("ddd")
     }
 
     Scaffold(

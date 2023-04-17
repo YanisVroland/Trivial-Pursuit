@@ -78,7 +78,6 @@ fun CustomOutlinedTextField(
             //isErrorValue = isErrorValue,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
         )
         if (!validateInput(value)) {
             Text(
