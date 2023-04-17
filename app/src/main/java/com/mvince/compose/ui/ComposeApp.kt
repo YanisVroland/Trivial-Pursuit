@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.mvince.compose.ui.details.DetailsScreen
 import com.mvince.compose.ui.forgotPassword.ForgotPasswordScreen
+import com.mvince.compose.ui.mainPage.MainPageScreen
 import com.mvince.compose.ui.signin.LoginScreen
 import com.mvince.compose.ui.signup.SignupScreen
 import com.mvince.compose.ui.users.UsersScreen
@@ -20,6 +21,7 @@ fun ComposeApp() {
         navController = navController,
         startDestination = Route.LOGIN
     ) {
+        composable(route = Route.MAINPAGE) { MainPageScreen(navController)}
         composable(route = Route.LOGIN) { LoginScreen(navController) }
         composable(route = Route.REGISTER) { SignupScreen(navController) }
         composable(route = Route.FORGOTPASSWORD) { ForgotPasswordScreen(navController) }
@@ -47,6 +49,7 @@ fun ComposeApp() {
 }
 
 object Route {
+    const val MAINPAGE = "mainpage"
     const val USER = "user"
     const val DETAIL = "detail"
     const val LOGIN = "login"

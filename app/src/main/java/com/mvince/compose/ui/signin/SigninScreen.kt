@@ -122,6 +122,13 @@ fun LoginScreen(navController: NavHostController) {
                 title = "Valider",
                 onClick = {
                     viewModel.loginUser(email, password)
+                    println(authResource)
+
+                   if (authResource != null) {
+                        navController.navigate(Route.MAINPAGE)
+                    } else {
+                        //   navController.navigate(Route.LOGIN)
+                    }
                 },
                 modifier = Modifier.fillMaxWidth(),
             )
