@@ -12,11 +12,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SigninViewModel  @Inject constructor(private val repository: AuthRepository) : ViewModel() {
-    private val _signupFlow = MutableStateFlow<FirebaseUser?>(null)
-    val signupFlow: StateFlow<FirebaseUser?> = _signupFlow
+    private val _signinFlow = MutableStateFlow<FirebaseUser?>(null)
+    val signinFlow: StateFlow<FirebaseUser?> = _signinFlow
 
     fun loginUser(email: String, password: String) {
-        viewModelScope.launch { _signupFlow.value = repository.login(email, password) }
+        viewModelScope.launch { _signinFlow.value = repository.login(email, password) }
     }
 
 }

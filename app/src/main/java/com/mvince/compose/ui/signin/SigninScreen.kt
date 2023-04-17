@@ -37,7 +37,12 @@ fun LoginScreen(navController: NavHostController) {
     var password by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
 
-    val authResource = viewModel.signupFlow.collectAsState()
+    val authResource = viewModel.signinFlow.collectAsState().value
+    if (authResource != null) {
+        navController.navigate(Route.USER)
+    } else{
+        println("ddd")
+    }
 
     Scaffold(
         topBar = {
@@ -119,13 +124,6 @@ fun LoginScreen(navController: NavHostController) {
                 title = "Valider",
                 onClick = {
                     viewModel.loginUser(email, password)
-                    println(authResource)
-
-                   if (authResource != null) {
-                        navController.navigate(Route.USER)
-                    } else {
-                        //   navController.navigate(Route.LOGIN)
-                    }
                 },
                 modifier = Modifier.fillMaxWidth(),
             )
