@@ -12,6 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -35,14 +36,14 @@ fun LoginScreen(navController: NavHostController) {
     val viewModel = hiltViewModel<SigninViewModel>()
 
     var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("Plokij.1@") }
+    var password by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
     var emailValid by remember { mutableStateOf(true) }
     var passwordValid by remember { mutableStateOf(true) }
 
     val emailRegex = Regex("^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*\\.\\w+([.-]?\\w+)*\$")
-    val passwordRegex = Regex("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{6,}\$")
+    val passwordRegex = Regex("^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{6,}\$")
 
     val authResource = viewModel.signinFlow.collectAsState().value
 
@@ -127,6 +128,7 @@ fun LoginScreen(navController: NavHostController) {
                     }
                 }
             )
+            Text("Régle : 6 caractères dont un spécial et un 1 nombre", style = TextStyle(fontSize = 10.sp, fontStyle = FontStyle.Italic))
 
             Spacer(modifier = Modifier.height(16.dp))
 

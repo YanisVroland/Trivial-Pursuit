@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -21,6 +22,7 @@ import androidx.navigation.NavHostController
 import com.mvince.compose.ui.components.CustomButton
 import com.mvince.compose.ui.components.CustomOutlinedTextField
 import com.mvince.compose.R
+import com.mvince.compose.ui.Route
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -30,12 +32,35 @@ fun SignupScreen(navController: NavHostController) {
     val viewModel = hiltViewModel<SignupViewModel>()
 
     var email by remember { mutableStateOf("") }
+    var pseudo by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var password2 by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
     var showPassword2 by remember { mutableStateOf(false) }
+    var emailValid by remember { mutableStateOf(true) }
+    var pseudoValid by remember { mutableStateOf(true) }
+    var errorMessage by remember { mutableStateOf("") }
+    var passwordValid by remember { mutableStateOf(true) }
+    var password2Valid by remember { mutableStateOf(true) }
 
-    val authResource = viewModel.signupFlow.collectAsState()
+    val emailRegex = Regex("^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*\\.\\w+([.-]?\\w+)*\$")
+    val passwordRegex = Regex("^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{6,}\$")
+
+    val authResource = viewModel.signupFlow.collectAsState().value
+
+    if (authResource != null) {
+        navController.navigate(Route.USER)
+    }
+
+    fun inputVerification(): Boolean {
+        emailValid = email.matches(emailRegex)
+        passwordValid = password.matches(passwordRegex)
+        password2Valid = password == password2
+        pseudoValid = pseudo.isNotEmpty()
+
+        return emailValid && passwordValid;
+    }
+
 
     Scaffold(
         topBar = {
@@ -63,12 +88,31 @@ fun SignupScreen(navController: NavHostController) {
                     fontFamily = FontFamily.SansSerif
                 )
             )
-            Spacer(modifier = Modifier.height(64.dp))
+
+            Spacer(modifier = Modifier.height(30.dp))
+            if (!emailValid || !passwordValid || !password2Valid) Text(
+                errorMessage, color = MaterialTheme.colorScheme.error, style = TextStyle(
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.SansSerif
+                )
+            ) else Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             CustomOutlinedTextField(
                 value = email,
+                isErrorValue = !emailValid,
                 onValueChange = { email = it },
                 label = { Text(text = "Mail") },
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            CustomOutlinedTextField(
+                value = pseudo,
+                isErrorValue = !pseudoValid,
+                onValueChange = { pseudo = it },
+                label = { Text(text = "Pseudo") },
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -77,6 +121,7 @@ fun SignupScreen(navController: NavHostController) {
                 value = password,
                 onValueChange = { password = it },
                 label = { Text(text = "Mot de passe") },
+                isErrorValue = !passwordValid,
                 visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     IconButton(
@@ -91,12 +136,18 @@ fun SignupScreen(navController: NavHostController) {
                     }
                 }
             )
+            Text(
+                "Régle : 6 caractères dont un spécial et un 1 nombre",
+                style = TextStyle(fontSize = 10.sp, fontStyle = FontStyle.Italic)
+            )
+
 
             Spacer(modifier = Modifier.height(16.dp))
             CustomOutlinedTextField(
                 value = password2,
                 onValueChange = { password2 = it },
                 label = { Text(text = "Mot de passe ") },
+                isErrorValue = !password2Valid,
                 visualTransformation = if (showPassword2) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     IconButton(
@@ -114,7 +165,13 @@ fun SignupScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(64.dp))
             CustomButton(
                 title = "Valider",
-                onClick = { viewModel.signupUser(email, password) },
+                onClick = {
+                    if (inputVerification()) {
+                        viewModel.signupUser(email, password, pseudo)
+                    } else {
+                        errorMessage = "Il y a une erreur de saisie"
+                    }
+                },
                 modifier = Modifier.fillMaxWidth(),
             )
         }
