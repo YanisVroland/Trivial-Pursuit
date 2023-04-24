@@ -13,6 +13,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -25,7 +26,7 @@ import com.mvince.compose.R
 import com.mvince.compose.ui.Route
 import androidx.navigation.NavHostController
 import com.mvince.compose.ui.theme.linkColor
-
+import java.text.Normalizer.Form
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -34,12 +35,26 @@ fun LoginScreen(navController: NavHostController) {
     val viewModel = hiltViewModel<SigninViewModel>()
 
     var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("Plokij.1@") }
     var showPassword by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
+    var emailValid by remember { mutableStateOf(true) }
+    var passwordValid by remember { mutableStateOf(true) }
+
+    val emailRegex = Regex("^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*\\.\\w+([.-]?\\w+)*\$")
+    val passwordRegex = Regex("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{6,}\$")
 
     val authResource = viewModel.signinFlow.collectAsState().value
+
     if (authResource != null) {
         navController.navigate(Route.USER)
+    }
+
+    fun inputVerification(): Boolean {
+        emailValid = email.matches(emailRegex)
+        passwordValid = password.matches(passwordRegex)
+
+        return emailValid && passwordValid;
     }
 
     Scaffold(
@@ -70,12 +85,23 @@ fun LoginScreen(navController: NavHostController) {
                 )
             )
 
-            Spacer(modifier = Modifier.height(64.dp))
+            Spacer(modifier = Modifier.height(30.dp))
+            if(!emailValid || !passwordValid) Text(
+                errorMessage,color = MaterialTheme.colorScheme.error,  style = TextStyle(
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.SansSerif
+                )
+            )else Spacer(modifier = Modifier.height(15.dp))
+
+            Spacer(modifier = Modifier.height(30.dp))
 
             CustomOutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
                 label = { Text(text = "Mail") },
+                keyboardType = KeyboardType.Email,
+                isErrorValue = !emailValid,
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -84,6 +110,8 @@ fun LoginScreen(navController: NavHostController) {
                 value = password,
                 onValueChange = { password = it },
                 label = { Text(text = "Mot de passe") },
+                keyboardType = KeyboardType.Password,
+                isErrorValue = !passwordValid,
                 visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     IconButton(
@@ -121,13 +149,10 @@ fun LoginScreen(navController: NavHostController) {
             CustomButton(
                 title = "Valider",
                 onClick = {
-                    viewModel.loginUser(email, password)
-                    println(authResource)
-
-                   if (authResource != null) {
-                        navController.navigate(Route.MAINPAGE)
-                    } else {
-                        //   navController.navigate(Route.LOGIN)
+                    if(inputVerification()) {
+                        viewModel.loginUser(email, password)
+                    }else{
+                        errorMessage = "Il y a une erreur de saisie"
                     }
                 },
                 modifier = Modifier.fillMaxWidth(),

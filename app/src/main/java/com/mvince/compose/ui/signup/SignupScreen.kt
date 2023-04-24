@@ -94,7 +94,7 @@ fun SignupScreen(navController: NavHostController) {
 
             Spacer(modifier = Modifier.height(16.dp))
             CustomOutlinedTextField(
-                value = password,
+                value = password2,
                 onValueChange = { password2 = it },
                 label = { Text(text = "Mot de passe ") },
                 visualTransformation = if (showPassword2) VisualTransformation.None else PasswordVisualTransformation(),

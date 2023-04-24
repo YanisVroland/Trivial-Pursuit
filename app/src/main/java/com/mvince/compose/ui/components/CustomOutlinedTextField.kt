@@ -1,18 +1,10 @@
 package com.mvince.compose.ui.components
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -21,7 +13,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 private val customTextFieldStyle = TextStyle(
@@ -44,49 +35,41 @@ fun CustomOutlinedTextField(
     maxLines: Int = 1,
     singleLine: Boolean = true,
     textStyle: TextStyle = customTextFieldStyle,
+    keyboardType: KeyboardType = KeyboardType.Text,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
-    //isErrorValue: Boolean = false,
+    isErrorValue: Boolean = false,
     validateInput: (String) -> Boolean = { true }
 ) {
-    Column(
+    OutlinedTextField(
+        value = value,
+        onValueChange = { newValue ->
+            if (validateInput(newValue)) {
+                onValueChange(newValue)
+            }
+        },
+        textStyle = textStyle,
+        label = label,
+        enabled = enabled,
+        readOnly = readOnly,
+        maxLines = maxLines,
+        singleLine = singleLine,
+        visualTransformation = visualTransformation,
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
+        isError = isErrorValue,
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            errorBorderColor = MaterialTheme.colorScheme.error
+        ),
+        keyboardOptions = KeyboardOptions(
+            capitalization = KeyboardCapitalization.None,
+            autoCorrect = false,
+            keyboardType = keyboardType,
+            imeAction = ImeAction.Next
+        ),
         modifier = modifier
-    ) {
-        OutlinedTextField(
-            value = value,
-            onValueChange = { newValue ->
-                if (validateInput(newValue)) {
-                    onValueChange(newValue)
-                }
-            },
-            textStyle = textStyle,
-            label = label,
-            enabled = enabled,
-            readOnly = readOnly,
-            maxLines = maxLines,
-            singleLine = singleLine,
-            visualTransformation = visualTransformation,
-            leadingIcon = leadingIcon,
-            trailingIcon = trailingIcon,
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.None,
-                autoCorrect = false,
-                keyboardType = KeyboardType.Email,
-                imeAction = ImeAction.Next
-            ),
-            //isErrorValue = isErrorValue,
-            modifier = Modifier
-                .fillMaxWidth()
-        )
-        if (!validateInput(value)) {
-            Text(
-                text = "Invalid input",
-                color = MaterialTheme.colorScheme.error,
-                fontSize = 12.sp,
-                modifier = Modifier.padding(top = 4.dp)
-            )
-        }
-    }
+            .fillMaxWidth()
+    )
 }
 
