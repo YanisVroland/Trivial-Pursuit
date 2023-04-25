@@ -153,6 +153,7 @@ fun LoginScreen(navController: NavHostController) {
                 onClick = {
                     if(inputVerification()) {
                         viewModel.loginUser(email, password)
+                        navController.navigate(Route.MAINPAGE)
                     }else{
                         errorMessage = "Il y a une erreur de saisie"
                     }
