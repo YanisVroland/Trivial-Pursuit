@@ -16,7 +16,7 @@ class SigninViewModel  @Inject constructor(private val repository: AuthRepositor
     val signinFlow: StateFlow<FirebaseUser?> = _signinFlow
 
     fun loginUser(email: String, password: String) {
-        viewModelScope.launch { _signinFlow.value = repository.login(email, password) }
+        viewModelScope.launch { _signinFlow.value = repository.login(email.trim(), password) }
     }
 
 }

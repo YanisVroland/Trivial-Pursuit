@@ -2,6 +2,7 @@ package com.mvince.compose.ui.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
 import com.mvince.compose.domain.UserFirebase
 import com.mvince.compose.repository.AuthRepository
@@ -19,19 +20,27 @@ class SignupViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
-    private val _signupFlow = MutableStateFlow<FirebaseUser?>(null)
-    val signupFlow: StateFlow<FirebaseUser?> = _signupFlow
-
     private val _isAuthentificated = MutableStateFlow<Boolean>(false)
     val isAuthentificated: StateFlow<Boolean>
         get() = _isAuthentificated
 
-    fun signupUser(email: String, password: String,pseudo: String) {
+    private val _errorFlow = MutableStateFlow<FirebaseAuthException?>(null)
+    val errorFlow: MutableStateFlow<FirebaseAuthException?>
+        get() = _errorFlow
+
+    fun signupUser(email: String, password: String, pseudo: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val uid = authRepository.signup(email, password)?.uid
-            if (uid != null) {
-                _isAuthentificated.value = firebaseRepository.insertUser(uid, UserFirebase(pseudo,email));
+            try {
+                val uid = authRepository.signup(email, password)?.uid
+                if (uid != null) {
+                    _isAuthentificated.value =
+                        firebaseRepository.insertUser(uid, UserFirebase(pseudo, email));
+                }
+            } catch (e: FirebaseAuthException) {
+                _errorFlow.value = e
+                e.printStackTrace()
             }
         }
+
     }
 }

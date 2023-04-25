@@ -23,6 +23,7 @@ import com.mvince.compose.ui.components.CustomButton
 import com.mvince.compose.ui.components.CustomOutlinedTextField
 import com.mvince.compose.R
 import com.mvince.compose.ui.Route
+import kotlinx.coroutines.launch
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -46,21 +47,38 @@ fun SignupScreen(navController: NavHostController) {
     val emailRegex = Regex("^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*\\.\\w+([.-]?\\w+)*\$")
     val passwordRegex = Regex("^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{6,}\$")
 
-    val authResource = viewModel.signupFlow.collectAsState().value
+    val authResource = viewModel.isAuthentificated.collectAsState().value
+    val errorFlow = viewModel.errorFlow.collectAsState().value
 
-    if (authResource != null) {
-        navController.navigate(Route.USER)
+    if (authResource) {
+        navController.navigate(Route.LOGIN)
+    }
+
+    if(errorFlow !=null){
+        errorMessage = when (errorFlow.message) {
+            "ERROR_EMAIL_ALREADY_IN_USE" -> {
+                "Cette adresse e-mail est déjà associée à un autre compte."
+            }
+            "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL" -> {
+                "Un compte existe déjà avec cette adresse e-mail. Veuillez vous connecter avec votre compte existant."
+            }
+            "ERROR_CREDENTIAL_ALREADY_IN_USE" -> {
+                "Ce compte est déjà associé à un autre fournisseur d'authentification."
+            }
+            else -> {
+                "Une erreur inconnue s'est produite."
+            }
+        }
     }
 
     fun inputVerification(): Boolean {
         emailValid = email.matches(emailRegex)
         passwordValid = password.matches(passwordRegex)
-        password2Valid = password == password2
+        password2Valid = password2.matches(passwordRegex) && password == password2
         pseudoValid = pseudo.isNotEmpty()
 
         return emailValid && passwordValid;
     }
-
 
     Scaffold(
         topBar = {
@@ -90,7 +108,7 @@ fun SignupScreen(navController: NavHostController) {
             )
 
             Spacer(modifier = Modifier.height(30.dp))
-            if (!emailValid || !passwordValid || !password2Valid) Text(
+            if (errorMessage.isNotEmpty()) Text(
                 errorMessage, color = MaterialTheme.colorScheme.error, style = TextStyle(
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
@@ -167,7 +185,7 @@ fun SignupScreen(navController: NavHostController) {
                 title = "Valider",
                 onClick = {
                     if (inputVerification()) {
-                        viewModel.signupUser(email, password, pseudo)
+                        viewModel.signupUser(email.trim(), password, pseudo.trim())
                     } else {
                         errorMessage = "Il y a une erreur de saisie"
                     }

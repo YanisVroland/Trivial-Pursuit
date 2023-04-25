@@ -20,13 +20,13 @@ class AuthRepository @Inject constructor(private val firebaseAuth: FirebaseAuth)
         }
     }
 
-    suspend fun signup(email: String, password: String): FirebaseUser? {
+    @Throws
+    suspend fun signup(email: String, password: String) : FirebaseUser? {
         return try {
             val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
             result.user
         }catch (e: Exception) {
-            e.printStackTrace()
-            null
+            throw e
         }
     }
 
