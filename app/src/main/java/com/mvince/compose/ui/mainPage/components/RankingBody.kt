@@ -20,7 +20,7 @@ import com.mvince.compose.ui.signin.SigninViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun RankingScreen(navController: NavHostController) {
+fun RankingBody(navController: NavHostController) {
 
     val viewModel = hiltViewModel<SigninViewModel>()
     var user by remember { mutableStateOf("") }

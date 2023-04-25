@@ -10,7 +10,7 @@ import androidx.navigation.navArgument
 import com.mvince.compose.ui.details.DetailsScreen
 import com.mvince.compose.ui.forgotPassword.ForgotPasswordScreen
 import com.mvince.compose.ui.mainPage.MainPageScreen
-import com.mvince.compose.ui.ranking.RankingScreen
+import com.mvince.compose.ui.ranking.RankingBody
 import com.mvince.compose.ui.signin.LoginScreen
 import com.mvince.compose.ui.signup.SignupScreen
 import com.mvince.compose.ui.users.UsersScreen
@@ -46,7 +46,7 @@ fun ComposeApp() {
         ) {
             DetailsScreen(navController)
         }
-        composable(route = Route.RANKING) { RankingScreen(navController)}
+        composable(route = Route.RANKING) { RankingBody(navController)}
     }
 }
 
