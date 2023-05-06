@@ -15,8 +15,7 @@ class AuthRepository @Inject constructor(private val firebaseAuth: FirebaseAuth)
             val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
             result.user
         }catch (e: Exception) {
-            e.printStackTrace()
-            null
+            throw e
         }
     }
 
@@ -35,8 +34,7 @@ class AuthRepository @Inject constructor(private val firebaseAuth: FirebaseAuth)
             firebaseAuth.sendPasswordResetEmail(email).await()
             true
         } catch (e: Exception) {
-            e.printStackTrace()
-            false
+            throw e
         }
     }
 

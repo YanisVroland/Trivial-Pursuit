@@ -55,15 +55,15 @@ fun SignupScreen(navController: NavHostController) {
     }
 
     if(errorFlow !=null){
-        errorMessage = when (errorFlow.message) {
+        errorMessage = when (errorFlow.errorCode) {
             "ERROR_EMAIL_ALREADY_IN_USE" -> {
                 "Cette adresse e-mail est déjà associée à un autre compte."
             }
-            "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL" -> {
-                "Un compte existe déjà avec cette adresse e-mail. Veuillez vous connecter avec votre compte existant."
+            "ERROR_INVALID_EMAIL" -> {
+                "L'adresse e-mail n'est pas valide."
             }
-            "ERROR_CREDENTIAL_ALREADY_IN_USE" -> {
-                "Ce compte est déjà associé à un autre fournisseur d'authentification."
+            "ERROR_WEAK_PASSWORD" -> {
+                "Le mot de passe n'est pas assez sécurisé."
             }
             else -> {
                 "Une erreur inconnue s'est produite."

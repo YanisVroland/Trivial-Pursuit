@@ -46,9 +46,30 @@ fun LoginScreen(navController: NavHostController) {
     val passwordRegex = Regex("^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{6,}\$")
 
     val authResource = viewModel.signinFlow.collectAsState().value
+    val errorFlow = viewModel.errorFlow.collectAsState().value
 
     if (authResource != null) {
-        navController.navigate(Route.USER)
+        navController.navigate(Route.MAINPAGE)
+    }
+
+    if(errorFlow !=null){
+        errorMessage = when (errorFlow.errorCode) {
+            "ERROR_WRONG_PASSWORD" -> {
+                "Le mot de passe n'est pas valide."
+            }
+            "ERROR_INVALID_EMAIL" -> {
+                "L'adresse e-mail n'est pas valide."
+            }
+            "ERROR_USER_DISABLED" -> {
+                "L'utilisateur correspondant à l'email donné a été désactivé."
+            }
+            "ERROR_USER_NOT_FOUND" -> {
+                "Utilisateur non trouvé."
+            }
+            else -> {
+                "Une erreur inconnue s'est produite."
+            }
+        }
     }
 
     fun inputVerification(): Boolean {
@@ -87,7 +108,7 @@ fun LoginScreen(navController: NavHostController) {
             )
 
             Spacer(modifier = Modifier.height(30.dp))
-            if(!emailValid || !passwordValid) Text(
+            if (errorMessage.isNotEmpty()) Text(
                 errorMessage,color = MaterialTheme.colorScheme.error,  style = TextStyle(
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
@@ -152,8 +173,7 @@ fun LoginScreen(navController: NavHostController) {
                 title = "Valider",
                 onClick = {
                     if(inputVerification()) {
-                        viewModel.loginUser(email, password)
-                        navController.navigate(Route.MAINPAGE)
+                        viewModel.loginUser(email.trim(), password)
                     }else{
                         errorMessage = "Il y a une erreur de saisie"
                     }
