@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mvince.compose.ui.Route
+import com.mvince.compose.ui.mainPage.components.GameBody
 import com.mvince.compose.ui.ranking.RankingBody
 import kotlin.contracts.Returns
 
@@ -21,7 +22,7 @@ import kotlin.contracts.Returns
 
 fun MainPageScreen(navController: NavHostController) {
     val viewModel = hiltViewModel<MainPageViewModel>()
-    val navController = rememberNavController()
+    val appNavController = rememberNavController()
     Scaffold(
         topBar = {
             TopAppBar(
@@ -39,11 +40,11 @@ fun MainPageScreen(navController: NavHostController) {
                     painter = painterResource(id = com.mvince.compose.R.drawable.accounticon),
                     contentDescription = "account page"
                 )}, label = { Text(text = "account page")})
-                NavigationBarItem(selected = true, onClick = {navController.navigate(Route.MAINPAGE)}, icon = { Icon(
+                NavigationBarItem(selected = true, onClick = {appNavController.navigate(Route.GAME)}, icon = { Icon(
                     painter = painterResource(id = com.mvince.compose.R.drawable.homeicon),
                     contentDescription = "main page"
                 )}, label = { Text(text = "main page")})
-                NavigationBarItem(selected = false, onClick = {navController.navigate(Route.RANKING)}, icon = { Icon(
+                NavigationBarItem(selected = false, onClick = {appNavController.navigate(Route.RANKING)}, icon = { Icon(
                     painter = painterResource(id = com.mvince.compose.R.drawable.trophy),
                     contentDescription = "ranking page"
                 )}, label = { Text(text = "ranking page")})
@@ -51,14 +52,14 @@ fun MainPageScreen(navController: NavHostController) {
         }
     ) {
         NavHost(
-            navController = navController,
-            startDestination = Route.MAINPAGE
+            navController = appNavController,
+            startDestination = Route.GAME
         ){
-            composable(Route.MAINPAGE) {
-                MainPageScreen(navController = navController)
+            composable(Route.GAME) {
+                GameBody(navController = appNavController)
             }
             composable(Route.RANKING) {
-                RankingBody(navController = navController)
+                RankingBody(navController = appNavController)
             }
         }
     }

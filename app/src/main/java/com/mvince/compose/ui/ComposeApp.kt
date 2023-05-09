@@ -20,13 +20,13 @@ fun ComposeApp() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Route.LOGIN
+        startDestination = Route.MAINPAGE
     ) {
         composable(route = Route.MAINPAGE) { MainPageScreen(navController)}
         composable(route = Route.LOGIN) { LoginScreen(navController) }
         composable(route = Route.REGISTER) { SignupScreen(navController) }
         composable(route = Route.FORGOTPASSWORD) { ForgotPasswordScreen(navController) }
-        composable(route = Route.USER) { backStackEntry ->
+        /*composable(route = Route.USER) { backStackEntry ->
             UsersScreen(
                 onUserClick = { username ->
                     // In order to discard duplicated navigation events, we check the Lifecycle
@@ -35,8 +35,8 @@ fun ComposeApp() {
                     }
                 }
             )
-        }
-        composable(
+        }*/
+        /*composable(
             route = "${Route.DETAIL}/{${Argument.USERNAME}}",
             arguments = listOf(
                 navArgument(Argument.USERNAME) {
@@ -45,8 +45,7 @@ fun ComposeApp() {
             ),
         ) {
             DetailsScreen(navController)
-        }
-        composable(route = Route.RANKING) { RankingBody(navController)}
+        }*/
     }
 }
 
@@ -58,6 +57,7 @@ object Route {
     const val REGISTER = "register"
     const val FORGOTPASSWORD = "forgotPassword"
     const val RANKING = "ranking"
+    const val GAME = "game"
 }
 
 object Argument {
