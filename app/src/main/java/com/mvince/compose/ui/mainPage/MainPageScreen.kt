@@ -3,6 +3,7 @@ package com.mvince.compose.ui.mainPage
 import android.annotation.SuppressLint
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -22,7 +23,10 @@ import kotlin.contracts.Returns
 
 fun MainPageScreen(navController: NavHostController) {
     val viewModel = hiltViewModel<MainPageViewModel>()
+
     val appNavController = rememberNavController()
+
+
     Scaffold(
         topBar = {
             TopAppBar(
