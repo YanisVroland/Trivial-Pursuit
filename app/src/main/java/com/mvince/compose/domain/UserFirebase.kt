@@ -6,5 +6,5 @@ data class UserFirebase(
     var pseudo: String,
     var email: String,
     var score: Int = 0,
-    var avatar: Int = R.drawable.gamepad_variant
+    var avatar: Int = R.drawable._2
 )

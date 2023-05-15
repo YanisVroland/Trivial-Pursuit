@@ -1,12 +1,12 @@
 package com.mvince.compose.ui.mainPage.components
 
 import android.annotation.SuppressLint
+import android.content.res.AssetManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,16 +24,23 @@ import com.mvince.compose.ui.components.CustomOutlinedTextField
 import com.mvince.compose.ui.mainPage.MainPageViewModel
 import com.mvince.compose.ui.theme.invalidButton
 import com.mvince.compose.ui.theme.lambdaButton
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import coil.compose.rememberImagePainter
+import coil.transform.CircleCropTransformation
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnrememberedMutableState")
 @Composable
 fun UserBody(navController: NavController) {
     val viewModel = hiltViewModel<MainPageViewModel>()
     var expanded by remember { mutableStateOf(false) }
-    val iconList = listOf(R.drawable.gamepad_variant, R.drawable.accounticon, R.drawable.trophy)
+    val iconList = listOf(R.drawable._1, R.drawable._2, R.drawable._3,R.drawable._4, R.drawable._5, R.drawable._6,R.drawable._7, R.drawable._8)
 
     var currentUserState by remember { mutableStateOf(UserFirebase("Youne", "Youne@dsqdqd.com", 10))}
+
     val currentUser by remember { derivedStateOf { currentUserState } }
+
 
     Column(
         modifier = Modifier
@@ -52,7 +59,6 @@ fun UserBody(navController: NavController) {
                     .clip(CircleShape)
                     .border(2.dp, Color.Gray, CircleShape)
             )
-
             Box(
                 modifier = Modifier
                     .size(32.dp)
@@ -90,6 +96,7 @@ fun UserBody(navController: NavController) {
             }
         }
 
+
         Spacer(modifier = Modifier.height(64.dp))
 
         CustomOutlinedTextField(
@@ -98,11 +105,16 @@ fun UserBody(navController: NavController) {
             label = { Text("Pseudo") },
             modifier = Modifier.fillMaxWidth()
         )
-
         Spacer(modifier = Modifier.height(64.dp))
 
-        Button(onClick = { }, colors = ButtonDefaults.buttonColors(containerColor = lambdaButton)) {
-            Text("Modifier")
+        Button(
+            colors = ButtonDefaults.buttonColors(containerColor = lambdaButton),
+            onClick = { viewModel.nextQuestion() }) {
+            Text(text = "Envoyer modification")
+            Icon(
+                painter = painterResource(id = R.drawable.levaitaico),
+                contentDescription = "Icône question suivante"
+            )
         }
         Spacer(modifier = Modifier.height(64.dp))
 
@@ -126,4 +138,5 @@ fun UserBody(navController: NavController) {
 
     }
 }
+
 
