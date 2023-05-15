@@ -1,24 +1,29 @@
 package com.mvince.compose.ui
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.Lifecycle
-import androidx.navigation.NavType
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.mvince.compose.ui.forgotPassword.ForgotPasswordScreen
 import com.mvince.compose.ui.mainPage.MainPageScreen
-import com.mvince.compose.ui.ranking.RankingBody
 import com.mvince.compose.ui.signin.LoginScreen
 import com.mvince.compose.ui.signup.SignupScreen
 
 @Composable
 fun ComposeApp() {
     val navController = rememberNavController()
+    val viewModel = hiltViewModel<ComposeViewModel>()
+
+    fun startRedirection(): String {
+        if(viewModel.currentUser == null)
+            return Route.LOGIN
+        return Route.MAINPAGE
+    }
+
     NavHost(
         navController = navController,
-        startDestination = Route.LOGIN
+        startDestination = startRedirection()
     ) {
         composable(route = Route.MAINPAGE) { MainPageScreen(navController)}
         composable(route = Route.LOGIN) { LoginScreen(navController) }
