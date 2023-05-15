@@ -6,7 +6,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColorScheme(
-    primary = primary
+    primary = primaryDarkmode,
+    secondary = Color.DarkGray,
+    background = Color.DarkGray,
+    surface = surfaceDarkmode, // surface blanche (par défaut)
+    onPrimary = Color.LightGray, // texte blanc sur fond primaire
+    onSecondary = Color.LightGray, // texte noir sur fond secondaire
+    onBackground = Color.LightGray, // texte noir sur fond de base
+    onSurface = Color.LightGray // texte noir sur surface
 )
 
 private val LightColorPalette = lightColorScheme(

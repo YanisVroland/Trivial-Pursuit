@@ -15,8 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.*
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mvince.compose.ui.signin.SigninViewModel
@@ -33,9 +35,12 @@ fun RankingBody(navController: NavHostController) {
     data class member(val name: String, val score: Int)
 
     var cpt = 0
+    val TitleModifier = Modifier
+        .fillMaxWidth()
+        .clickable{false}
+        .padding(horizontal = 75.dp, vertical = 20.dp)
     val cardModifier = Modifier
         .fillMaxWidth()
-        .padding(10.dp)
         .clickable { false }
     val test = listOf<member>(
         member("Pipoune", 500),
@@ -53,17 +58,25 @@ fun RankingBody(navController: NavHostController) {
         member("You", 1),
         member("You", 1),
     );
-
+    Column(
+        modifier = TitleModifier
+    ){
+        Text(
+            text = "LEADERBOARD",
+            fontSize = 30.sp,
+            textAlign = TextAlign.Center
+        )
+    }
 
     LazyColumn(
-        Modifier
-            .padding(horizontal = 16.dp),
+        Modifier.padding(horizontal = 16.dp, vertical = 90.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
         items(test) { hu ->
             cpt += 1
             ListItem(
+                modifier = cardModifier,
                 leadingContent = {
                     Text(
                         text = cpt.toString()
