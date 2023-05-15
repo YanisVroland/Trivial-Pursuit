@@ -16,6 +16,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mvince.compose.ui.Route
 import com.mvince.compose.ui.mainPage.components.GameBody
+import com.mvince.compose.ui.mainPage.components.GameEndBody
+import com.mvince.compose.ui.mainPage.components.GameStartBody
 import com.mvince.compose.ui.mainPage.components.UserBody
 import com.mvince.compose.ui.ranking.RankingBody
 import com.mvince.compose.ui.theme.JetpackComposeBoilerplateTheme
@@ -75,13 +77,19 @@ fun MainPageScreen(navController: NavHostController) {
         ) {
             NavHost(
                 navController = appNavController,
-                startDestination = Route.GAME
+                startDestination = Route.STARTGAME
             ) {
+                composable(Route.STARTGAME) {
+                    GameStartBody(navController = appNavController)
+                }
                 composable(Route.USER) {
                     UserBody(navController = navController)
                 }
                 composable(Route.GAME) {
                     GameBody(navController = appNavController)
+                }
+                composable(Route.ENDGAME) {
+                    GameEndBody(navController = appNavController)
                 }
                 composable(Route.RANKING) {
                     RankingBody(navController = appNavController)

@@ -60,6 +60,8 @@ object Route {
     const val RANKING = "ranking"
     const val GAME = "game"
     const val USER = "user"
+    const val STARTGAME = "startgame"
+    const val ENDGAME = "endgame"
 }
 
 object Argument {

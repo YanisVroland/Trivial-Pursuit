@@ -1,7 +1,6 @@
 package com.mvince.compose.ui.mainPage.components
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -16,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -25,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.mvince.compose.R
+import com.mvince.compose.ui.Route
 import com.mvince.compose.ui.mainPage.MainPageViewModel
 import com.mvince.compose.ui.theme.lambdaButton
 
@@ -71,26 +70,36 @@ fun GameBody(navController: NavController) {
                 text = "${viewModel.currentIndex + 1}/${viewModel._questions.size}",
             )
         }
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            AsyncImage(
-                model = "https://shuffle.cards/assets/images/licenses/trivial_pursuit/header_logo.png",
-                contentDescription = "Logo trivial pursuit"
-            )
-        }
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(), verticalArrangement = Arrangement.Top, horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.size(20.dp))
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                AsyncImage(
+                    model = "https://shuffle.cards/assets/images/licenses/trivial_pursuit/header_logo.png",
+                    contentDescription = "Logo trivial pursuit"
+                )
+            }
+            Spacer(modifier = Modifier.height(40.dp))
             if (question != null) {
-                Spacer(modifier = Modifier.size(30.dp))
-                Card(modifier = Modifier
-                    .clip(
-                        RoundedCornerShape(10.dp),
+                Card(
+                    modifier = Modifier
+                        .clip(
+                            RoundedCornerShape(10.dp),
+                        )
+                        .border(1.dp, Color.Black, RoundedCornerShape(10.dp)),
+                    colors = CardDefaults.cardColors(containerColor = Color.LightGray)
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .padding(10.dp), text = question.question
                     )
-                    .border(1.dp, Color.Black, RoundedCornerShape(10.dp)), colors = CardDefaults.cardColors(containerColor = Color.LightGray)) {
-                    Text(modifier = Modifier
-                        .padding(10.dp), text = question.question)
                 }
-                Spacer(modifier = Modifier.size(60.dp))
+                Spacer(modifier = Modifier.size(20.dp))
                 if (answers != null) {
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(2)
@@ -116,11 +125,27 @@ fun GameBody(navController: NavController) {
                     Text(text = "Mauvaise Réponse ...")
                 }
             }
-            Spacer(modifier = Modifier.height(15.dp))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
-                Button(colors = ButtonDefaults.buttonColors(containerColor = lambdaButton), onClick = { viewModel.nextQuestion() }) {
-                    Text(text = "Question suivante")
-                    Icon(painter = painterResource(id = R.drawable.levaitaico), contentDescription = "Icône question suivante")
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                if (viewModel.currentIndex == viewModel._questions.size - 1 && viewModel.answered) {
+                    Button(
+                        colors = ButtonDefaults.buttonColors(containerColor = lambdaButton),
+                        onClick = { navController.navigate(Route.ENDGAME) }) {
+                        Text(text = "Terminer le quizz")
+                    }
+                } else {
+                    Button(
+                        colors = ButtonDefaults.buttonColors(containerColor = lambdaButton),
+                        onClick = { viewModel.nextQuestion() }) {
+                        Text(text = "Question suivante")
+                        Icon(
+                            painter = painterResource(id = R.drawable.levaitaico),
+                            contentDescription = "Icône question suivante"
+                        )
+                    }
                 }
             }
         }
