@@ -18,12 +18,15 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.mvince.compose.R
 import com.mvince.compose.ui.mainPage.MainPageViewModel
+import com.mvince.compose.ui.theme.lambdaButton
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -115,8 +118,9 @@ fun GameBody(navController: NavController) {
             }
             Spacer(modifier = Modifier.height(15.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
-                Button(onClick = { viewModel.nextQuestion() }) {
+                Button(colors = ButtonDefaults.buttonColors(containerColor = lambdaButton), onClick = { viewModel.nextQuestion() }) {
                     Text(text = "Question suivante")
+                    Icon(painter = painterResource(id = R.drawable.levaitaico), contentDescription = "Icône question suivante")
                 }
             }
         }
