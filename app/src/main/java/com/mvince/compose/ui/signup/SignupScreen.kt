@@ -52,7 +52,7 @@ fun SignupScreen(navController: NavHostController) {
 
     LaunchedEffect(authResource) {
         authResource?.let { authResource ->
-            if (authResource != null ) {
+            if (authResource) {
                 navController.navigate(Route.LOGIN)
             }
         }

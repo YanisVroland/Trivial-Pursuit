@@ -14,17 +14,17 @@ class AuthRepository @Inject constructor(private val firebaseAuth: FirebaseAuth)
         return try {
             val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
             result.user
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             throw e
         }
     }
 
     @Throws
-    suspend fun signup(email: String, password: String) : FirebaseUser? {
+    suspend fun signup(email: String, password: String): FirebaseUser? {
         return try {
             val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
             result.user
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             throw e
         }
     }
@@ -38,8 +38,11 @@ class AuthRepository @Inject constructor(private val firebaseAuth: FirebaseAuth)
         }
     }
 
-
     fun logout() {
-        firebaseAuth.signOut()
+        return try {
+            firebaseAuth.signOut()
+        } catch (e: Exception) {
+            throw e
+        }
     }
 }

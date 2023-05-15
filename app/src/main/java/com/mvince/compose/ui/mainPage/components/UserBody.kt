@@ -6,8 +6,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -16,18 +17,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import com.mvince.compose.R
+import com.mvince.compose.domain.UserFirebase
 import com.mvince.compose.ui.Route
 import com.mvince.compose.ui.components.CustomOutlinedTextField
 import com.mvince.compose.ui.mainPage.MainPageViewModel
 import com.mvince.compose.ui.theme.invalidButton
 import com.mvince.compose.ui.theme.lambdaButton
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnrememberedMutableState")
 @Composable
 fun UserBody(navController: NavController) {
     val viewModel = hiltViewModel<MainPageViewModel>()
+    var expanded by remember { mutableStateOf(false) }
+    val iconList = listOf(R.drawable.gamepad_variant, R.drawable.accounticon, R.drawable.trophy)
+
+    var currentUserState by remember { mutableStateOf(UserFirebase("Youne", "Youne@dsqdqd.com", 10))}
+    val currentUser by remember { derivedStateOf { currentUserState } }
 
     Column(
         modifier = Modifier
@@ -36,35 +42,69 @@ fun UserBody(navController: NavController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(R.drawable.gamepad_variant),
-            contentDescription = "Avatar",
-            modifier = Modifier
-                .size(120.dp)
-                .clip(CircleShape)
-                .border(2.dp, Color.Gray, CircleShape)
-        )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Box(modifier = Modifier.wrapContentSize()) {
+            Image(
+                painter = painterResource(currentUser.avatar),
+                contentDescription = "Avatar",
+                modifier = Modifier
+                    .size(120.dp)
+                    .clip(CircleShape)
+                    .border(2.dp, Color.Gray, CircleShape)
+            )
 
-        Button(onClick = { /* Logique de sélection d'image */ }) {
-            Text("Modifier l'avatar")
+            Box(
+                modifier = Modifier
+                    .size(32.dp)
+                    .clip(CircleShape)
+                    .background(lambdaButton)
+                    .align(Alignment.BottomEnd)
+                    .padding(3.dp)
+            ) {
+                IconButton(
+                    onClick = { expanded = true },
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.pencil),
+                        contentDescription = "Modifier l'avatar",
+                        tint = Color.White
+                    )
+                }
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    iconList.forEach { icon ->
+                        DropdownMenuItem(onClick = {
+                            currentUserState = currentUserState.copy(avatar = icon)
+                        }, text = {
+                            Image(
+                                painter = painterResource(icon),
+                                contentDescription = "Icon",
+                                modifier = Modifier.size(24.dp)
+                            )
+                        })
+                    }
+                }
+            }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(64.dp))
+
         CustomOutlinedTextField(
-            value = "",
-            onValueChange = {  },
+            value = currentUser.pseudo,
+            onValueChange = { },
             label = { Text("Pseudo") },
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(64.dp))
 
-        Button(onClick = { }) {
+        Button(onClick = { }, colors = ButtonDefaults.buttonColors(containerColor = lambdaButton)) {
             Text("Modifier")
         }
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(64.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -73,10 +113,13 @@ fun UserBody(navController: NavController) {
             Button(onClick = {
                 viewModel.logout()
                 navController.navigate(Route.LOGIN)
-            }, colors= ButtonDefaults.buttonColors(containerColor = invalidButton)) {
+            }, colors = ButtonDefaults.buttonColors(containerColor = invalidButton)) {
                 Text("Déconnexion")
             }
-            Button(onClick = { },colors= ButtonDefaults.buttonColors(containerColor = lambdaButton)) {
+            Button(
+                onClick = { },
+                colors = ButtonDefaults.buttonColors(containerColor = lambdaButton)
+            ) {
                 Text("Reset Score")
             }
         }

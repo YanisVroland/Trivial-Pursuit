@@ -4,6 +4,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.firebase.auth.FirebaseUser
 import com.mvince.compose.repository.QuestionsRepository
 import com.mvince.compose.network.model.Result
 import com.mvince.compose.repository.AuthRepository
@@ -22,6 +23,9 @@ class MainPageViewModel @Inject constructor(private val questionsRepository: Que
 
     var _questions: List<Result> = listOf()
     var currentIndex = 0
+
+    private val _currentUser = MutableStateFlow<FirebaseUser?>(repository.currentUser)
+    val currentUser: StateFlow<FirebaseUser?> = _currentUser
 
     private val _question = MutableStateFlow<Result?>(null)
     val question: StateFlow<Result?>
