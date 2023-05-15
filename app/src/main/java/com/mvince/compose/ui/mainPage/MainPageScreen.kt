@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -23,9 +25,9 @@ import kotlin.contracts.Returns
 @Composable
 
 fun MainPageScreen(navController: NavHostController) {
-    val viewModel = hiltViewModel<MainPageViewModel>()
 
     val appNavController = rememberNavController()
+    val selectedTab = remember { mutableStateOf(Route.GAME) }
 
     JetpackComposeBoilerplateTheme() {
         Scaffold(
@@ -38,8 +40,11 @@ fun MainPageScreen(navController: NavHostController) {
                         )
                     }, label = { Text(text = "account page") })
                     NavigationBarItem(
-                        selected = true,
-                        onClick = { appNavController.navigate(Route.GAME) },
+                        selected = selectedTab.value == Route.GAME,
+                        onClick = {
+                            selectedTab.value = Route.GAME
+                            appNavController.navigate(Route.GAME)
+                        },
                         icon = {
                             Icon(
                                 painter = painterResource(id = com.mvince.compose.R.drawable.homeicon),
@@ -48,8 +53,11 @@ fun MainPageScreen(navController: NavHostController) {
                         },
                         label = { Text(text = "main page") })
                     NavigationBarItem(
-                        selected = false,
-                        onClick = { appNavController.navigate(Route.RANKING) },
+                        selected = selectedTab.value == Route.RANKING,
+                        onClick = {
+                            selectedTab.value = Route.RANKING
+                            appNavController.navigate(Route.RANKING)
+                        },
                         icon = {
                             Icon(
                                 painter = painterResource(id = com.mvince.compose.R.drawable.trophy),
