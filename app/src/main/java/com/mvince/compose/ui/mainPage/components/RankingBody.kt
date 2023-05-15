@@ -37,11 +37,9 @@ fun RankingBody(navController: NavHostController) {
     var cpt = 0
     val TitleModifier = Modifier
         .fillMaxWidth()
-        .clickable{false}
-        .padding(horizontal = 75.dp, vertical = 20.dp)
+        .padding(vertical=20.dp)
     val cardModifier = Modifier
         .fillMaxWidth()
-        .clickable { false }
     val test = listOf<member>(
         member("Pipoune", 500),
         member("Yanis", 500),
@@ -59,7 +57,7 @@ fun RankingBody(navController: NavHostController) {
         member("You", 1),
     );
     Column(
-        modifier = TitleModifier
+        modifier = TitleModifier, horizontalAlignment = Alignment.CenterHorizontally
     ){
         Text(
             text = "LEADERBOARD",
