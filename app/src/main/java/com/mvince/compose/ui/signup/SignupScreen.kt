@@ -50,8 +50,12 @@ fun SignupScreen(navController: NavHostController) {
     val authResource = viewModel.isAuthentificated.collectAsState().value
     val errorFlow = viewModel.errorFlow.collectAsState().value
 
-    if (authResource) {
-        navController.navigate(Route.LOGIN)
+    LaunchedEffect(authResource) {
+        authResource?.let { authResource ->
+            if (authResource != null ) {
+                navController.navigate(Route.LOGIN)
+            }
+        }
     }
 
     if(errorFlow !=null){

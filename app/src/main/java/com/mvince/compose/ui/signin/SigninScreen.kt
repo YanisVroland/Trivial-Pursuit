@@ -48,8 +48,12 @@ fun LoginScreen(navController: NavHostController) {
     val authResource = viewModel.signinFlow.collectAsState().value
     val errorFlow = viewModel.errorFlow.collectAsState().value
 
-    if (authResource != null) {
-        navController.navigate(Route.MAINPAGE)
+    LaunchedEffect(authResource) {
+        authResource?.let { authResource ->
+            if (authResource != null ) {
+                navController.navigate(Route.MAINPAGE)
+            }
+        }
     }
 
     if(errorFlow !=null){

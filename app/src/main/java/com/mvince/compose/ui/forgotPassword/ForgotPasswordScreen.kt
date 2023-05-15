@@ -33,12 +33,15 @@ fun ForgotPasswordScreen(navController: NavHostController) {
     var errorMessage by remember { mutableStateOf("") }
     val emailRegex = Regex("^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*\\.\\w+([.-]?\\w+)*\$")
 
-    val boolResource = viewModel.resetPasswordFlow.collectAsState().value
+    val resetPasswordFlow = viewModel.resetPasswordFlow.collectAsState().value
     val errorFlow = viewModel.errorFlow.collectAsState().value
 
-
-    if (boolResource == true) {
-        navController.navigate(Route.LOGIN)
+    LaunchedEffect(resetPasswordFlow) {
+        resetPasswordFlow?.let { isResetPasswordSuccessful ->
+            if (isResetPasswordSuccessful) {
+                navController.navigate(Route.LOGIN)
+            }
+        }
     }
 
     if(errorFlow !=null){

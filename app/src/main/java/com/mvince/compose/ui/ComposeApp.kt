@@ -7,20 +7,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.mvince.compose.ui.details.DetailsScreen
 import com.mvince.compose.ui.forgotPassword.ForgotPasswordScreen
 import com.mvince.compose.ui.mainPage.MainPageScreen
 import com.mvince.compose.ui.ranking.RankingBody
 import com.mvince.compose.ui.signin.LoginScreen
 import com.mvince.compose.ui.signup.SignupScreen
-import com.mvince.compose.ui.users.UsersScreen
 
 @Composable
 fun ComposeApp() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = Route.MAINPAGE
+        startDestination = Route.LOGIN
     ) {
         composable(route = Route.MAINPAGE) { MainPageScreen(navController)}
         composable(route = Route.LOGIN) { LoginScreen(navController) }
@@ -51,8 +49,6 @@ fun ComposeApp() {
 
 object Route {
     const val MAINPAGE = "mainpage"
-    const val USER = "user"
-    const val DETAIL = "detail"
     const val LOGIN = "login"
     const val REGISTER = "register"
     const val FORGOTPASSWORD = "forgotPassword"
