@@ -78,7 +78,7 @@ fun MainPageScreen(navController: NavHostController) {
                 startDestination = Route.GAME
             ) {
                 composable(Route.USER) {
-                    UserBody(navController = appNavController)
+                    UserBody(navController = navController)
                 }
                 composable(Route.GAME) {
                     GameBody(navController = appNavController)

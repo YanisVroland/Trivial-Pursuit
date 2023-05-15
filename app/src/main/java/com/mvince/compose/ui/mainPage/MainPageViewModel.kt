@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mvince.compose.repository.QuestionsRepository
 import com.mvince.compose.network.model.Result
+import com.mvince.compose.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -13,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainPageViewModel @Inject constructor(private val questionsRepository: QuestionsRepository): ViewModel() {
+class MainPageViewModel @Inject constructor(private val questionsRepository: QuestionsRepository,  private val repository: AuthRepository) : ViewModel() {
 
     val SCORE_INCREMENT = 10
 
@@ -57,4 +58,10 @@ class MainPageViewModel @Inject constructor(private val questionsRepository: Que
         _isCorrect.value = null
         answered = false
     }
+
+    fun logout() {
+        repository.logout();
+    }
+
+
 }
