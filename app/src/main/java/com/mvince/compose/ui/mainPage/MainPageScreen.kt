@@ -16,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mvince.compose.ui.Route
 import com.mvince.compose.ui.mainPage.components.GameBody
+import com.mvince.compose.ui.mainPage.components.UserBody
 import com.mvince.compose.ui.ranking.RankingBody
 import com.mvince.compose.ui.theme.JetpackComposeBoilerplateTheme
 import kotlin.contracts.Returns
@@ -33,7 +34,11 @@ fun MainPageScreen(navController: NavHostController) {
         Scaffold(
             bottomBar = {
                 NavigationBar() {
-                    NavigationBarItem(selected = false, onClick = {}, icon = {
+                    NavigationBarItem(selected = selectedTab.value == Route.USER,
+                        onClick = {
+                            selectedTab.value = Route.USER
+                            appNavController.navigate(Route.USER)
+                        }, icon = {
                         Icon(
                             painter = painterResource(id = com.mvince.compose.R.drawable.accounticon),
                             contentDescription = "Profil"
@@ -72,6 +77,9 @@ fun MainPageScreen(navController: NavHostController) {
                 navController = appNavController,
                 startDestination = Route.GAME
             ) {
+                composable(Route.USER) {
+                    UserBody(navController = appNavController)
+                }
                 composable(Route.GAME) {
                     GameBody(navController = appNavController)
                 }

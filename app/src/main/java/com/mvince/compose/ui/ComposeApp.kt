@@ -59,6 +59,7 @@ object Route {
     const val FORGOTPASSWORD = "forgotPassword"
     const val RANKING = "ranking"
     const val GAME = "game"
+    const val USER = "user"
 }
 
 object Argument {

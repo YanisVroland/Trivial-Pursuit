@@ -11,3 +11,8 @@ val linkColor = Color(0xFF417B96) // un jaune-vert lumineux
 
 val surfaceDarkmode = Color.hsl(267F,0.19F,0.14F)
 val primaryDarkmode = Color.hsl(295F, 0.29F, 0.42F)
+
+
+val invalidButton = Color.hsl(360F, 0.46F, 0.48F)
+val validButton = Color.hsl(109F, 0.46F, 0.48F)
+val lambdaButton = Color.hsl(211F, 0.46F, 0.48F)
