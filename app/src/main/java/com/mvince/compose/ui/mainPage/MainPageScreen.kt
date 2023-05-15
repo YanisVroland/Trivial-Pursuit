@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.mvince.compose.ui.Route
 import com.mvince.compose.ui.mainPage.components.GameBody
 import com.mvince.compose.ui.ranking.RankingBody
+import com.mvince.compose.ui.theme.JetpackComposeBoilerplateTheme
 import kotlin.contracts.Returns
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,44 +27,49 @@ fun MainPageScreen(navController: NavHostController) {
 
     val appNavController = rememberNavController()
 
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Trivial Pursuit",
-                        textAlign = TextAlign.Center,
-                    )
+    JetpackComposeBoilerplateTheme() {
+        Scaffold(
+            bottomBar = {
+                NavigationBar() {
+                    NavigationBarItem(selected = false, onClick = {}, icon = {
+                        Icon(
+                            painter = painterResource(id = com.mvince.compose.R.drawable.accounticon),
+                            contentDescription = "account page"
+                        )
+                    }, label = { Text(text = "account page") })
+                    NavigationBarItem(
+                        selected = true,
+                        onClick = { appNavController.navigate(Route.GAME) },
+                        icon = {
+                            Icon(
+                                painter = painterResource(id = com.mvince.compose.R.drawable.homeicon),
+                                contentDescription = "main page"
+                            )
+                        },
+                        label = { Text(text = "main page") })
+                    NavigationBarItem(
+                        selected = false,
+                        onClick = { appNavController.navigate(Route.RANKING) },
+                        icon = {
+                            Icon(
+                                painter = painterResource(id = com.mvince.compose.R.drawable.trophy),
+                                contentDescription = "ranking page"
+                            )
+                        },
+                        label = { Text(text = "ranking page") })
                 }
-            )
-        },
-        bottomBar = {
-            NavigationBar() {
-                NavigationBarItem(selected = false, onClick = {}, icon = { Icon(
-                    painter = painterResource(id = com.mvince.compose.R.drawable.accounticon),
-                    contentDescription = "account page"
-                )}, label = { Text(text = "account page")})
-                NavigationBarItem(selected = true, onClick = {appNavController.navigate(Route.GAME)}, icon = { Icon(
-                    painter = painterResource(id = com.mvince.compose.R.drawable.homeicon),
-                    contentDescription = "main page"
-                )}, label = { Text(text = "main page")})
-                NavigationBarItem(selected = false, onClick = {appNavController.navigate(Route.RANKING)}, icon = { Icon(
-                    painter = painterResource(id = com.mvince.compose.R.drawable.trophy),
-                    contentDescription = "ranking page"
-                )}, label = { Text(text = "ranking page")})
             }
-        }
-    ) {
-        NavHost(
-            navController = appNavController,
-            startDestination = Route.GAME
-        ){
-            composable(Route.GAME) {
-                GameBody(navController = appNavController)
-            }
-            composable(Route.RANKING) {
-                RankingBody(navController = appNavController)
+        ) {
+            NavHost(
+                navController = appNavController,
+                startDestination = Route.GAME
+            ) {
+                composable(Route.GAME) {
+                    GameBody(navController = appNavController)
+                }
+                composable(Route.RANKING) {
+                    RankingBody(navController = appNavController)
+                }
             }
         }
     }
