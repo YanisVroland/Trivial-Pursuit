@@ -17,6 +17,8 @@ class MainPageViewModel @Inject constructor(private val questionsRepository: Que
 
     val SCORE_INCREMENT = 10
 
+    var answered = false
+
     private var _questions: List<Result> = listOf()
     private var currentIndex = 0
 
@@ -44,6 +46,7 @@ class MainPageViewModel @Inject constructor(private val questionsRepository: Que
         if(_isCorrect.value == true) {
             _totalScore.value += SCORE_INCREMENT
         }
+        answered = true
     }
 
     fun nextQuestion() {
@@ -51,5 +54,7 @@ class MainPageViewModel @Inject constructor(private val questionsRepository: Que
         if(currentIndex < _questions.size){
             _question.value = _questions[currentIndex]
         }
+        _isCorrect.value = null
+        answered = false
     }
 }

@@ -50,7 +50,7 @@ fun GameBody(navController: NavController) {
                     answers.forEach {
                         val answer = it
                         if (answer != null) {
-                            Button(onClick = { viewModel.validateAnswer(answer) }) {
+                            Button(onClick = { viewModel.validateAnswer(answer) }, enabled = !viewModel.answered) {
                                 Text(text = answer)
                             }
                         }
