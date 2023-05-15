@@ -36,9 +36,9 @@ fun MainPageScreen(navController: NavHostController) {
                     NavigationBarItem(selected = false, onClick = {}, icon = {
                         Icon(
                             painter = painterResource(id = com.mvince.compose.R.drawable.accounticon),
-                            contentDescription = "account page"
+                            contentDescription = "Profil"
                         )
-                    }, label = { Text(text = "account page") })
+                    }, label = { Text(text = "Profil") })
                     NavigationBarItem(
                         selected = selectedTab.value == Route.GAME,
                         onClick = {
@@ -47,11 +47,11 @@ fun MainPageScreen(navController: NavHostController) {
                         },
                         icon = {
                             Icon(
-                                painter = painterResource(id = com.mvince.compose.R.drawable.homeicon),
-                                contentDescription = "main page"
+                                painter = painterResource(id = com.mvince.compose.R.drawable.gamepad_variant),
+                                contentDescription = "Trivial Pursuit"
                             )
                         },
-                        label = { Text(text = "main page") })
+                        label = { Text(text = "Trivial Pursuit") })
                     NavigationBarItem(
                         selected = selectedTab.value == Route.RANKING,
                         onClick = {
@@ -61,10 +61,10 @@ fun MainPageScreen(navController: NavHostController) {
                         icon = {
                             Icon(
                                 painter = painterResource(id = com.mvince.compose.R.drawable.trophy),
-                                contentDescription = "ranking page"
+                                contentDescription = "Classement"
                             )
                         },
-                        label = { Text(text = "ranking page") })
+                        label = { Text(text = "Classement") })
                 }
             }
         ) {

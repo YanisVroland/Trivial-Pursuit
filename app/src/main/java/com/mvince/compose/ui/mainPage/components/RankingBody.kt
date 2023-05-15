@@ -60,7 +60,7 @@ fun RankingBody(navController: NavHostController) {
         modifier = TitleModifier, horizontalAlignment = Alignment.CenterHorizontally
     ){
         Text(
-            text = "LEADERBOARD",
+            text = "CLASSEMENT",
             fontSize = 30.sp,
             textAlign = TextAlign.Center
         )
