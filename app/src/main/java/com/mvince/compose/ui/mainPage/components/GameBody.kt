@@ -1,21 +1,28 @@
 package com.mvince.compose.ui.mainPage.components
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.mvince.compose.ui.mainPage.MainPageViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -35,17 +42,19 @@ fun GameBody(navController: NavController) {
             .padding(horizontal = 16.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = "Score : $totalScore")
+            Text(fontWeight = FontWeight.Bold, text = "Score : $totalScore")
             Text(
                 modifier = Modifier
                     .padding(16.dp)
                     .drawBehind {
                         drawCircle(
-                            color = Color.Gray,
+                            color = Color.LightGray,
                             radius = this.size.minDimension + 5
                         )
                     }
@@ -59,43 +68,56 @@ fun GameBody(navController: NavController) {
                 text = "${viewModel.currentIndex + 1}/${viewModel._questions.size}",
             )
         }
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
-            Text(modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 75.dp, vertical = 20.dp)
-                .padding(vertical=20.dp), text = "Trivial Pursuit")
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            AsyncImage(
+                model = "https://shuffle.cards/assets/images/licenses/trivial_pursuit/header_logo.png",
+                contentDescription = "Logo trivial pursuit"
+            )
         }
-        if (question != null) {
-            Text(text = question.question)
-            if (answers != null) {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2)
-                ) {
-                    items(answers) { answer ->
-                        if (answer != null) {
-                            Button(
-                                modifier = Modifier.padding(10.dp),
-                                onClick = { viewModel.validateAnswer(answer) },
-                                enabled = !viewModel.answered
-                            ) {
-                                Text(text = answer)
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(), verticalArrangement = Arrangement.Top, horizontalAlignment = Alignment.CenterHorizontally) {
+            if (question != null) {
+                Spacer(modifier = Modifier.size(30.dp))
+                Card(modifier = Modifier
+                    .clip(
+                        RoundedCornerShape(10.dp),
+                    )
+                    .border(1.dp, Color.Black, RoundedCornerShape(10.dp)), colors = CardDefaults.cardColors(containerColor = Color.LightGray)) {
+                    Text(modifier = Modifier
+                        .padding(10.dp), text = question.question)
+                }
+                Spacer(modifier = Modifier.size(60.dp))
+                if (answers != null) {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2)
+                    ) {
+                        items(answers) { answer ->
+                            if (answer != null) {
+                                Button(
+                                    modifier = Modifier.padding(10.dp),
+                                    onClick = { viewModel.validateAnswer(answer) },
+                                    enabled = !viewModel.answered
+                                ) {
+                                    Text(text = answer)
+                                }
                             }
                         }
                     }
                 }
             }
-        }
-        if (isCorrect != null) {
-            if (isCorrect) {
-                Text(text = "Réponse Correcte !")
-            } else {
-                Text(text = "Mauvaise Réponse ...")
+            if (isCorrect != null) {
+                if (isCorrect) {
+                    Text(text = "Réponse Correcte !")
+                } else {
+                    Text(text = "Mauvaise Réponse ...")
+                }
             }
-        }
-        Spacer(modifier = Modifier.height(15.dp))
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
-            Button(onClick = { viewModel.nextQuestion() }) {
-                Text(text = "Question suivante")
+            Spacer(modifier = Modifier.height(15.dp))
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
+                Button(onClick = { viewModel.nextQuestion() }) {
+                    Text(text = "Question suivante")
+                }
             }
         }
     }

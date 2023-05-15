@@ -51,12 +51,14 @@ class MainPageViewModel @Inject constructor(private val questionsRepository: Que
     }
 
     fun nextQuestion() {
-        currentIndex ++
-        if(currentIndex < _questions.size){
-            _question.value = _questions[currentIndex]
+        if(answered) {
+            currentIndex ++
+            if(currentIndex < _questions.size){
+                _question.value = _questions[currentIndex]
+            }
+            _isCorrect.value = null
+            answered = false
         }
-        _isCorrect.value = null
-        answered = false
     }
 
     fun logout() {
