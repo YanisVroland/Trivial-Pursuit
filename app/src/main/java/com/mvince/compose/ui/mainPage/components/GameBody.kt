@@ -24,8 +24,10 @@ import com.mvince.compose.ui.mainPage.MainPageViewModel
 
 fun GameBody(navController: NavController) {
     val viewModel = hiltViewModel<MainPageViewModel>()
-    val questions = viewModel.question.collectAsState().value
-    val currentQuestions = viewModel.currentQuestion.collectAsState().value
+    val question = viewModel.question.collectAsState().value
+    val totalScore = viewModel.totalScore.collectAsState().value
+    val answers = question?.incorrectAnswers?.plus(question?.correctAnswer)?.shuffled()
+    val isCorrect = viewModel.isCorrect.collectAsState().value
 
 
     Scaffold(
@@ -41,9 +43,30 @@ fun GameBody(navController: NavController) {
         },
     ) {
         Column( modifier = androidx.compose.ui.Modifier.padding(it)) {
-         questions.forEach {
-             Text(text = it.question)
-         }
+            Text(text = totalScore.toString())
+            if (question != null) {
+                Text(text = question.question)
+                if (answers != null) {
+                    answers.forEach {
+                        val answer = it
+                        if (answer != null) {
+                            Button(onClick = { viewModel.validateAnswer(answer) }) {
+                                Text(text = answer)
+                            }
+                        }
+                    }
+                }
+            }
+            if(isCorrect != null) {
+                if (isCorrect) {
+                    Text(text = "Réponse Correcte !")
+                }else {
+                    Text(text = "Mauvaise Réponse ...")
+                }
+            }
+            Button(onClick = { viewModel.nextQuestion() }) {
+                Text(text = "Question suivante")
+            }
         }
     }
 }
