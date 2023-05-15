@@ -17,11 +17,13 @@ import androidx.compose.ui.unit.sp
 fun CustomButton(
     onClick: () -> Unit,
     title: String,
+    enabled: Boolean = true,
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
 ) {
     Button(
         onClick = onClick,
+        enabled = enabled,
         colors = ButtonDefaults.buttonColors(contentColor = backgroundColor),
         modifier = modifier
             .fillMaxWidth()

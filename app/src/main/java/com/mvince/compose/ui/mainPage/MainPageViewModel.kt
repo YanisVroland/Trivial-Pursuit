@@ -19,8 +19,8 @@ class MainPageViewModel @Inject constructor(private val questionsRepository: Que
 
     var answered = false
 
-    private var _questions: List<Result> = listOf()
-    private var currentIndex = 0
+    var _questions: List<Result> = listOf()
+    var currentIndex = 0
 
     private val _question = MutableStateFlow<Result?>(null)
     val question: StateFlow<Result?>
