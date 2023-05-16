@@ -1,6 +1,7 @@
 package com.mvince.compose.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,11 +15,12 @@ import com.mvince.compose.ui.signup.SignupScreen
 fun ComposeApp() {
     val navController = rememberNavController()
     val viewModel = hiltViewModel<ComposeViewModel>()
+    val currentUser = viewModel.currentUser.collectAsState().value
 
     fun startRedirection(): String {
-        if(viewModel.currentUser == null)
-            return Route.LOGIN
-        return Route.MAINPAGE
+        if(currentUser)
+            return Route.MAINPAGE
+        return Route.LOGIN
     }
 
     NavHost(

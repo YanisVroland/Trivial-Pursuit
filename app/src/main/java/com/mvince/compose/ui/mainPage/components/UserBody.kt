@@ -124,6 +124,7 @@ fun UserBody(navController: NavController) {
         ) {
             Button(onClick = {
                 viewModel.logout()
+
                 navController.navigate(Route.LOGIN)
             }, colors = ButtonDefaults.buttonColors(containerColor = invalidButton)) {
                 Text("Déconnexion")

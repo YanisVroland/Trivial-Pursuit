@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ComposeViewModel @Inject  constructor(private val repository: AuthRepository) : ViewModel() {
 
-    private val _currentUser = MutableStateFlow<FirebaseUser?>(repository.currentUser)
-    val currentUser: StateFlow<FirebaseUser?> = _currentUser
+    private val _currentUser = MutableStateFlow<Boolean>(repository.currentUser != null)
+    val currentUser: StateFlow<Boolean> = _currentUser
 
 }
