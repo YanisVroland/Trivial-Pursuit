@@ -3,9 +3,8 @@ package com.mvince.compose.ui.signup
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.auth.FirebaseUser
 import com.mvince.compose.domain.UserFirebase
-import com.mvince.compose.repository.AuthRepository
+import com.mvince.compose.repository.AuthFirebaseRepository
 import com.mvince.compose.repository.UserFirebaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignupViewModel @Inject constructor(
     private val firebaseRepository: UserFirebaseRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthFirebaseRepository
 ) : ViewModel() {
 
     private val _isAuthentificated = MutableStateFlow<Boolean>(false)

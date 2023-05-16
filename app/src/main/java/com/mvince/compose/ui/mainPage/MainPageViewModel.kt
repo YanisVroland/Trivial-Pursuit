@@ -1,21 +1,23 @@
 package com.mvince.compose.ui.mainPage
 
-import androidx.compose.runtime.collectAsState
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.auth.FirebaseUser
-import com.mvince.compose.repository.QuestionsRepository
+import com.mvince.compose.repository.QuestionsApiRepository
 import com.mvince.compose.network.model.Result
-import com.mvince.compose.repository.AuthRepository
+import com.mvince.compose.repository.AuthFirebaseRepository
+import com.mvince.compose.repository.QuestionsFirebaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
-class MainPageViewModel @Inject constructor(private val questionsRepository: QuestionsRepository,  private val repository: AuthRepository) : ViewModel() {
+class MainPageViewModel @Inject constructor(private val questionsFirebaseRepository: QuestionsFirebaseRepository, private val questionsAPIRepository: QuestionsApiRepository, private val repository: AuthFirebaseRepository) : ViewModel() {
 
     val SCORE_INCREMENT = 10
 
@@ -41,8 +43,14 @@ class MainPageViewModel @Inject constructor(private val questionsRepository: Que
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            _questions = questionsRepository.getQuestionsOfDay()
-            _question.value = _questions.first()
+            questionsFirebaseRepository.getDailyQuestions().collect() {
+                if (it != null) {
+                    _questions = it.questionsWithAnswers
+                }else {
+                    _questions = questionsAPIRepository.getQuestionsOfDay()
+                    questionsFirebaseRepository.importDailyQuestions(_questions)
+                }
+            }
         }
     }
 

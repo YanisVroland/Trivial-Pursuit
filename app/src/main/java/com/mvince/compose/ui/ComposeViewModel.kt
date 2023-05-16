@@ -1,18 +1,14 @@
 package com.mvince.compose.ui
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.mvince.compose.repository.QuestionsRepository
-import com.mvince.compose.network.model.Result
-import com.mvince.compose.repository.AuthRepository
+import com.mvince.compose.repository.AuthFirebaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
-class ComposeViewModel @Inject  constructor(private val repository: AuthRepository) : ViewModel() {
+class ComposeViewModel @Inject  constructor(private val repository: AuthFirebaseRepository) : ViewModel() {
 
     private val _currentUser = MutableStateFlow<Boolean>(repository.currentUser != null)
     val currentUser: StateFlow<Boolean> = _currentUser

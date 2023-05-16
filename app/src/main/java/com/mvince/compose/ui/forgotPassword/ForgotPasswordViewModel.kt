@@ -3,7 +3,7 @@ package com.mvince.compose.ui.forgotPassword
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuthException
-import com.mvince.compose.repository.AuthRepository
+import com.mvince.compose.repository.AuthFirebaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ForgotPasswordViewModel @Inject constructor(private val repository: AuthRepository) :
+class ForgotPasswordViewModel @Inject constructor(private val repository: AuthFirebaseRepository) :
     ViewModel() {
     private val _resetPasswordFlow = MutableStateFlow<Boolean?>(null)
     val resetPasswordFlow: StateFlow<Boolean?> = _resetPasswordFlow

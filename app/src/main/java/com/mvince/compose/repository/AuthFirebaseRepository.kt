@@ -5,7 +5,7 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class AuthRepository @Inject constructor(private val firebaseAuth: FirebaseAuth) {
+class AuthFirebaseRepository @Inject constructor(private val firebaseAuth: FirebaseAuth) {
 
     val currentUser: FirebaseUser?
         get() = firebaseAuth.currentUser
