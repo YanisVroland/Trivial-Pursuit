@@ -38,6 +38,9 @@ fun UserBody(navController: NavController) {
     var expanded by remember { mutableStateOf(false) }
     val user = viewModel.user.collectAsState().value
 
+    var test by remember { mutableStateOf<Int?>(null) }
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -48,7 +51,7 @@ fun UserBody(navController: NavController) {
 
         Box(modifier = Modifier.wrapContentSize()) {
             Image(
-                painter = painterResource(R.drawable._1),
+                painter = test?.let { painterResource(iconList[it]) } ?: painterResource(iconList[user.avatar]),
                 contentDescription = "Avatar",
                 modifier = Modifier
                     .size(120.dp)
@@ -79,6 +82,7 @@ fun UserBody(navController: NavController) {
                 ) {
                     iconList.forEach { icon ->
                         DropdownMenuItem(onClick = {
+                            test = iconList.indexOf(icon)
                         }, text = {
                             Image(
                                 painter = painterResource(icon),
@@ -120,7 +124,11 @@ fun UserBody(navController: NavController) {
             Button(onClick = {
                 viewModel.logout()
 
-                navController.navigate(Route.LOGIN)
+                navController.navigate(Route.LOGIN){
+                    popUpTo(navController.graph.id){
+                        inclusive = true
+                    }
+                }
             }, colors = ButtonDefaults.buttonColors(containerColor = invalidButton)) {
                 Text("Déconnexion")
             }
