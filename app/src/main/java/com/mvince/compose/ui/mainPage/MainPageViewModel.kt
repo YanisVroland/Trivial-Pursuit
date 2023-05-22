@@ -30,6 +30,8 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
 
     val allUsers: StateFlow<List<UserFirebase?>> = userFirebaseRepository.getAllSortedByTotalScore().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
+    val allUsersDaily: StateFlow<List<UserFirebase?>> = userFirebaseRepository.getAllSortedByDailyScore().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
     private val _user = MutableStateFlow<UserFirebase>(UserFirebase())
     val user: StateFlow<UserFirebase>
     get() = _user

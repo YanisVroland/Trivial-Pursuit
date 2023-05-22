@@ -25,6 +25,10 @@ class UserFirebaseRepository @Inject constructor(private val firestore: Firebase
         return firestore.collection(_collection).orderBy("totalScore", Query.Direction.DESCENDING).snapshots().map { it.toObjects<UserFirebase>() }
     }
 
+    fun getAllSortedByDailyScore(): Flow<List<UserFirebase>> {
+        return firestore.collection(_collection).orderBy("dailyScore", Query.Direction.DESCENDING).snapshots().map { it.toObjects<UserFirebase>() }
+    }
+
     companion object {
         private const val _collection: String = "USER"
     }

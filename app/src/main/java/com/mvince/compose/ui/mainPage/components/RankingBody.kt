@@ -1,10 +1,7 @@
 package com.mvince.compose.ui.ranking
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -24,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mvince.compose.R
@@ -41,12 +39,19 @@ fun RankingBody(navController: NavHostController) {
 
     data class member(val name: String, val score: Int)
     val huh = mainModel.allUsers.collectAsState().value
-    var cpt = 0
+    val hah = mainModel.allUsersDaily.collectAsState().value
     val TitleModifier = Modifier
         .fillMaxWidth()
         .padding(vertical = 20.dp)
     val cardModifier = Modifier
         .fillMaxWidth()
+    var colorT = Color.Black
+    var switchOn by remember {
+        mutableStateOf(true)
+    }
+    if(isSystemInDarkTheme()){
+        colorT = Color.LightGray
+    }
     /*val test = listOf<member>(
         member("Pipoune", 500),
         member("Yanis", 500),
@@ -66,51 +71,97 @@ fun RankingBody(navController: NavHostController) {
     Column(
         modifier = TitleModifier, horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Switch(
+            checked = switchOn,
+            onCheckedChange = { switchOn_ ->
+                switchOn = switchOn_
+            }
+        )
         Text(
             text = "CLASSEMENT",
-            color = Color.LightGray,
+            color = colorT,
             fontSize = 30.sp,
             textAlign = TextAlign.Center
         )
     }
 
-    LazyColumn(
-        Modifier.padding(horizontal = 16.dp, vertical = 90.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
-    ) {
-        items(huh) { hu ->
-            cpt += 1
-            ListItem(
-                modifier = cardModifier,
-                leadingContent = {
-                    Text(
-                        text = cpt.toString()
-                    )
-
-                },
-                headlineText = {
-                    Row() {
-                        Image(
-                            painter = painterResource(R.drawable._2),
-                            contentDescription = "Avatar",
-                            modifier = Modifier
-                                .size(24.dp)
-                                .clip(CircleShape)
-                                .border(1.dp, Color.Gray, CircleShape)
-                        )
-                        Spacer(modifier = Modifier.width(5.dp))
+    if(switchOn){
+        LazyColumn(
+            Modifier.padding(horizontal = 16.dp, vertical = 90.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            items(hah) { hu ->
+                ListItem(
+                    modifier = cardModifier,
+                    leadingContent = {
                         Text(
-                            text = hu?.pseudo.toString()
+                            text = (hah.indexOf(hu)+1).toString()
+                        )
+
+                    },
+                    headlineText = {
+                        Row() {
+                            Image(
+                                painter = painterResource(R.drawable._2),
+                                contentDescription = "Avatar",
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .clip(CircleShape)
+                                    .border(1.dp, Color.Gray, CircleShape)
+                            )
+                            Spacer(modifier = Modifier.width(5.dp))
+                            Text(
+                                text = hu?.pseudo.toString()
+                            )
+                        }
+                    },
+                    trailingContent = {
+                        Text(
+                            text = hu?.dailyScore.toString()
                         )
                     }
-                },
-                trailingContent = {
-                    Text(
-                        text = hu?.totalScore.toString()
-                    )
-                }
-            )
+                )
+            }
+        }
+    }else{
+        LazyColumn(
+            Modifier.padding(horizontal = 16.dp, vertical = 90.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            items(huh) { hu ->
+                ListItem(
+                    modifier = cardModifier,
+                    leadingContent = {
+                        Text(
+                            text = (huh.indexOf(hu)+1).toString()
+                        )
+
+                    },
+                    headlineText = {
+                        Row() {
+                            Image(
+                                painter = painterResource(R.drawable._2),
+                                contentDescription = "Avatar",
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .clip(CircleShape)
+                                    .border(1.dp, Color.Gray, CircleShape)
+                            )
+                            Spacer(modifier = Modifier.width(5.dp))
+                            Text(
+                                text = hu?.pseudo.toString()
+                            )
+                        }
+                    },
+                    trailingContent = {
+                        Text(
+                            text = hu?.totalScore.toString()
+                        )
+                    }
+                )
+            }
         }
     }
 }
