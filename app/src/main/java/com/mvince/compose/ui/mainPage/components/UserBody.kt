@@ -33,13 +33,12 @@ import coil.transform.CircleCropTransformation
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnrememberedMutableState")
 @Composable
 fun UserBody(navController: NavController) {
+    val iconList = listOf(R.drawable._1, R.drawable._2, R.drawable._3,R.drawable._4, R.drawable._5, R.drawable._6,R.drawable._7, R.drawable._8)
     val viewModel = hiltViewModel<MainPageViewModel>()
     var expanded by remember { mutableStateOf(false) }
-    val iconList = listOf(R.drawable._1, R.drawable._2, R.drawable._3,R.drawable._4, R.drawable._5, R.drawable._6,R.drawable._7, R.drawable._8)
 
-    var currentUserState by remember { mutableStateOf(UserFirebase("Youne", "Youne@dsqdqd.com", 10))}
-
-    val currentUser by remember { derivedStateOf { currentUserState } }
+    val test = viewModel.user.collectAsState().value
+    var currentUser by remember { mutableStateOf (test) }
 
 
     Column(
@@ -83,7 +82,7 @@ fun UserBody(navController: NavController) {
                 ) {
                     iconList.forEach { icon ->
                         DropdownMenuItem(onClick = {
-                            currentUserState = currentUserState.copy(avatar = icon)
+                            currentUser = currentUser.copy(avatar = icon)
                         }, text = {
                             Image(
                                 painter = painterResource(icon),
@@ -109,7 +108,7 @@ fun UserBody(navController: NavController) {
 
         Button(
             colors = ButtonDefaults.buttonColors(containerColor = lambdaButton),
-            onClick = { viewModel.nextQuestion() }) {
+            onClick = {  }) {
             Text(text = "Envoyer modification")
             Icon(
                 painter = painterResource(id = R.drawable.levaitaico),

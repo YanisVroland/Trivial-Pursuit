@@ -17,7 +17,6 @@ class ForgotPasswordViewModel @Inject constructor(private val repository: AuthFi
     private val _resetPasswordFlow = MutableStateFlow<Boolean?>(null)
     val resetPasswordFlow: StateFlow<Boolean?> = _resetPasswordFlow
 
-
     private val _errorFlow = MutableStateFlow<FirebaseAuthException?>(null)
     val errorFlow: MutableStateFlow<FirebaseAuthException?>
         get() = _errorFlow

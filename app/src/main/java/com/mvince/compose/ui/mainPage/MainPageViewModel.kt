@@ -5,10 +5,13 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
+import com.mvince.compose.domain.UserFirebase
 import com.mvince.compose.repository.QuestionsApiRepository
 import com.mvince.compose.network.model.Result
 import com.mvince.compose.repository.AuthFirebaseRepository
 import com.mvince.compose.repository.QuestionsFirebaseRepository
+import com.mvince.compose.repository.UserFirebaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -17,7 +20,7 @@ import javax.inject.Inject
 
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
-class MainPageViewModel @Inject constructor(private val questionsFirebaseRepository: QuestionsFirebaseRepository, private val questionsAPIRepository: QuestionsApiRepository, private val repository: AuthFirebaseRepository) : ViewModel() {
+class MainPageViewModel @Inject constructor(private val questionsFirebaseRepository: QuestionsFirebaseRepository, private val questionsAPIRepository: QuestionsApiRepository, private val repository: AuthFirebaseRepository, private val userFirebaseRepository: UserFirebaseRepository) : ViewModel() {
 
     val SCORE_INCREMENT = 10
 
@@ -26,8 +29,9 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
     var _questions: List<Result> = listOf()
     var currentIndex = 0
 
-    private val _currentUser = MutableStateFlow<FirebaseUser?>(repository.currentUser)
-    val currentUser: StateFlow<FirebaseUser?> = _currentUser
+    private val _user = MutableStateFlow<UserFirebase>(UserFirebase())
+    val user: StateFlow<UserFirebase>
+    get() = _user
 
     private val _question = MutableStateFlow<Result?>(null)
     val question: StateFlow<Result?>
@@ -50,6 +54,13 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
                     _questions = questionsAPIRepository.getQuestionsOfDay()
                     questionsFirebaseRepository.importDailyQuestions(_questions)
                 }
+            }
+        }
+        viewModelScope.launch {
+            val userId = "Cu7H6XaYsuVgRlCEnbSmgzD64di1"
+            val user = userFirebaseRepository.getUser(userId)
+            if (user != null) {
+                _user.value = user
             }
         }
     }
