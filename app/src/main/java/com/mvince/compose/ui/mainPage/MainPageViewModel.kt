@@ -56,6 +56,7 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
                     _questions = questionsAPIRepository.getQuestionsOfDay()
                     questionsFirebaseRepository.importDailyQuestions(_questions)
                 }
+                _question.value = _questions.first()
             }
         }
         viewModelScope.launch(Dispatchers.IO) {

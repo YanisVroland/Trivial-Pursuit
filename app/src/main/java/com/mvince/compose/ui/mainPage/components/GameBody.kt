@@ -14,7 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -25,7 +27,9 @@ import coil.compose.AsyncImage
 import com.mvince.compose.R
 import com.mvince.compose.ui.Route
 import com.mvince.compose.ui.mainPage.MainPageViewModel
+import com.mvince.compose.ui.theme.invalidButton
 import com.mvince.compose.ui.theme.lambdaButton
+import com.mvince.compose.ui.theme.validButton
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -88,6 +92,12 @@ fun GameBody(navController: NavController) {
             if (question != null) {
                 Card(
                     modifier = Modifier
+                        .shadow(
+                            spotColor = Color.Black,
+                            elevation = 5.dp,
+                            shape = RoundedCornerShape(10.dp),
+                            ambientColor = Color.Gray
+                        )
                         .clip(
                             RoundedCornerShape(10.dp),
                         )
@@ -106,8 +116,22 @@ fun GameBody(navController: NavController) {
                     ) {
                         items(answers) { answer ->
                             if (answer != null) {
+                                var correct: Color
+                                if(answer == question.correctAnswer) {
+                                    correct = validButton
+                                }else {
+                                    correct = invalidButton
+                                }
                                 Button(
-                                    modifier = Modifier.padding(10.dp),
+                                    modifier = Modifier
+                                        .padding(10.dp)
+                                        .shadow(
+                                            spotColor = Color.Black,
+                                            elevation = 5.dp,
+                                            shape = RoundedCornerShape(16.dp),
+                                            ambientColor = Color.Gray
+                                        ),
+                                    colors = ButtonDefaults.buttonColors(disabledContainerColor = correct, disabledContentColor = Color.White),
                                     onClick = { viewModel.validateAnswer(answer) },
                                     enabled = !viewModel.answered
                                 ) {
