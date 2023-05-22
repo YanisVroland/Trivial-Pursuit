@@ -33,12 +33,21 @@ import coil.transform.CircleCropTransformation
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnrememberedMutableState")
 @Composable
 fun UserBody(navController: NavController) {
-    val iconList = listOf(R.drawable._1, R.drawable._2, R.drawable._3,R.drawable._4, R.drawable._5, R.drawable._6,R.drawable._7, R.drawable._8)
+    val iconList = listOf(
+        R.drawable._1,
+        R.drawable._2,
+        R.drawable._3,
+        R.drawable._4,
+        R.drawable._5,
+        R.drawable._6,
+        R.drawable._7,
+        R.drawable._8
+    )
     val viewModel = hiltViewModel<MainPageViewModel>()
     var expanded by remember { mutableStateOf(false) }
     val user = viewModel.user.collectAsState().value
 
-    var test by remember { mutableStateOf<Int?>(null) }
+    var avatar by remember { mutableStateOf<Int?>(null) }
 
 
     Column(
@@ -51,7 +60,8 @@ fun UserBody(navController: NavController) {
 
         Box(modifier = Modifier.wrapContentSize()) {
             Image(
-                painter = test?.let { painterResource(iconList[it]) } ?: painterResource(iconList[user.avatar]),
+                painter = avatar?.let { painterResource(iconList[it]) }
+                    ?: painterResource(iconList[user.avatar]),
                 contentDescription = "Avatar",
                 modifier = Modifier
                     .size(120.dp)
@@ -82,7 +92,7 @@ fun UserBody(navController: NavController) {
                 ) {
                     iconList.forEach { icon ->
                         DropdownMenuItem(onClick = {
-                            test = iconList.indexOf(icon)
+                            avatar = iconList.indexOf(icon)
                         }, text = {
                             Image(
                                 painter = painterResource(icon),
@@ -95,8 +105,35 @@ fun UserBody(navController: NavController) {
             }
         }
 
+        Spacer(modifier = Modifier.height(32.dp))
 
-        Spacer(modifier = Modifier.height(64.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("Score total : ${user.totalScore}")
+            Spacer(modifier = Modifier.width(8.dp))
+            Box(
+                modifier = Modifier
+                    .size(32.dp)
+                    .clip(CircleShape)
+                    .background(lambdaButton)
+                    .padding(3.dp)
+            ) {
+                IconButton(
+                    onClick = {},
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.cached),
+                        contentDescription = "Reset Score",
+                        tint = Color.White
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(22.dp))
 
         CustomOutlinedTextField(
             value = user.pseudo,
@@ -104,42 +141,30 @@ fun UserBody(navController: NavController) {
             label = { Text("Pseudo") },
             modifier = Modifier.fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(64.dp))
+        Spacer(modifier = Modifier.height(42.dp))
 
         Button(
             colors = ButtonDefaults.buttonColors(containerColor = lambdaButton),
-            onClick = {  }) {
+            onClick = { }) {
             Text(text = "Envoyer modification")
             Icon(
                 painter = painterResource(id = R.drawable.levaitaico),
                 contentDescription = "Icône question suivante"
             )
         }
-        Spacer(modifier = Modifier.height(64.dp))
+        Spacer(modifier = Modifier.height(34.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Button(onClick = {
-                viewModel.logout()
+        Button(onClick = {
+            viewModel.logout()
 
-                navController.navigate(Route.LOGIN){
-                    popUpTo(navController.graph.id){
-                        inclusive = true
-                    }
+            navController.navigate(Route.LOGIN) {
+                popUpTo(navController.graph.id) {
+                    inclusive = true
                 }
-            }, colors = ButtonDefaults.buttonColors(containerColor = invalidButton)) {
-                Text("Déconnexion")
             }
-            Button(
-                onClick = { },
-                colors = ButtonDefaults.buttonColors(containerColor = lambdaButton)
-            ) {
-                Text("Reset Score")
-            }
+        }, colors = ButtonDefaults.buttonColors(containerColor = invalidButton)) {
+            Text("Déconnexion")
         }
-
     }
 }
 

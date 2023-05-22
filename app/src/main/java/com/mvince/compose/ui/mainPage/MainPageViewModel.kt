@@ -73,8 +73,8 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
             }
         }
         viewModelScope.launch(Dispatchers.IO) {
-            val userId = "Cu7H6XaYsuVgRlCEnbSmgzD64di1"
-            val user = userFirebaseRepository.getUser(userId)
+            val userId = repository.currentUser?.uid
+            val user = userId?.let { userFirebaseRepository.getUser(it) }
             if (user != null) {
                 _user.value = user
             }
