@@ -2,6 +2,7 @@ package com.mvince.compose.ui.mainPage
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mvince.compose.R
@@ -11,6 +12,7 @@ import com.mvince.compose.network.model.Result
 import com.mvince.compose.repository.AuthFirebaseRepository
 import com.mvince.compose.repository.QuestionsFirebaseRepository
 import com.mvince.compose.repository.UserFirebaseRepository
+import com.mvince.compose.ui.theme.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -24,6 +26,9 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
     val SCORE_INCREMENT = 10
 
     var answered = false
+
+    val cardColors = listOf<Color>(pinkTrivial, purpleTrivial, greenTrivial, blueTrivial, yellowTrivial, orangeTrivial)
+    var currentCardColor: Color = Color.LightGray
 
     var _questions: List<Result> = listOf()
     var currentIndex = 0
@@ -64,6 +69,7 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
                 _question.value = _questions.first()
                 _answers.value =
                     question?.value?.incorrectAnswers?.plus(question?.value!!.correctAnswer)?.shuffled()!!
+                currentCardColor = cardColors.shuffled().first()
             }
         }
         viewModelScope.launch(Dispatchers.IO) {
@@ -90,6 +96,7 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
                 _question.value = _questions[currentIndex]
                 _answers.value =
                     question?.value?.incorrectAnswers?.plus(question?.value!!.correctAnswer)?.shuffled()!!
+                currentCardColor = cardColors.shuffled().first()
             }
             _isCorrect.value = null
             answered = false

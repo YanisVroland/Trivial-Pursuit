@@ -23,8 +23,7 @@ fun GameEndBody(navController: NavController) {
     val totalScore = viewModel.totalScore.collectAsState().value
 
     Column(modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
+        .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
         AsyncImage(
             modifier = Modifier.padding(vertical = 93.dp),
             model = "https://shuffle.cards/assets/images/licenses/trivial_pursuit/header_logo.png",

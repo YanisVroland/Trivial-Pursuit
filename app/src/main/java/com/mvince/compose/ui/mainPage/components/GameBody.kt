@@ -1,6 +1,7 @@
 package com.mvince.compose.ui.mainPage.components
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -18,6 +19,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -33,7 +35,6 @@ import com.mvince.compose.ui.theme.validButton
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-
 fun GameBody(navController: NavController) {
     val viewModel = hiltViewModel<MainPageViewModel>()
     val question = viewModel.question.collectAsState().value
@@ -82,7 +83,8 @@ fun GameBody(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.size(20.dp))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            Row(modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center) {
                 AsyncImage(
                     model = "https://shuffle.cards/assets/images/licenses/trivial_pursuit/header_logo.png",
                     contentDescription = "Logo trivial pursuit"
@@ -92,21 +94,15 @@ fun GameBody(navController: NavController) {
             if (question != null) {
                 Card(
                     modifier = Modifier
-                        .shadow(
-                            spotColor = Color.Black,
-                            elevation = 5.dp,
-                            shape = RoundedCornerShape(10.dp),
-                            ambientColor = Color.Gray
-                        )
                         .clip(
                             RoundedCornerShape(10.dp),
                         )
-                        .border(1.dp, Color.Black, RoundedCornerShape(10.dp)),
-                    colors = CardDefaults.cardColors(containerColor = Color.LightGray)
+                        .border(2.dp, Color.Black, RoundedCornerShape(10.dp)),
+                    colors = CardDefaults.cardColors(containerColor = viewModel.currentCardColor)
                 ) {
                     Text(
                         modifier = Modifier
-                            .padding(10.dp), text = question.question
+                            .padding(10.dp), color = Color.White, text = question.question
                     )
                 }
                 Spacer(modifier = Modifier.size(20.dp))
@@ -144,9 +140,7 @@ fun GameBody(navController: NavController) {
             }
             if (isCorrect != null) {
                 if (isCorrect) {
-                    Text(text = "Réponse Correcte !")
-                } else {
-                    Text(text = "Mauvaise Réponse ...")
+                    Toast.makeText(LocalContext.current, "+ 10 !", Toast.LENGTH_SHORT).show()
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
@@ -157,13 +151,23 @@ fun GameBody(navController: NavController) {
                 if (viewModel.currentIndex == viewModel._questions.size - 1 && viewModel.answered) {
                     Button(
                         colors = ButtonDefaults.buttonColors(containerColor = lambdaButton),
-                        onClick = { navController.navigate(Route.ENDGAME) }) {
+                        onClick = {
+
+                            navController.navigate(Route.ENDGAME)
+                        }) {
                         Text(text = "Terminer le quizz")
                     }
                 } else {
                     Button(
-                        colors = ButtonDefaults.buttonColors(containerColor = lambdaButton),
-                        onClick = { viewModel.nextQuestion() }) {
+                        modifier = Modifier.shadow(
+                            spotColor = Color.Black,
+                            elevation = 5.dp,
+                            shape = RoundedCornerShape(16.dp),
+                            ambientColor = Color.Gray
+                        ),
+                        colors = ButtonDefaults.buttonColors(containerColor = lambdaButton, disabledContainerColor = Color.Gray),
+                        onClick = { viewModel.nextQuestion() },
+                        enabled = viewModel.answered) {
                         Text(text = "Question suivante")
                         Icon(
                             painter = painterResource(id = R.drawable.levaitaico),
