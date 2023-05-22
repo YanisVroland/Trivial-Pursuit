@@ -106,7 +106,7 @@ fun RankingBody(navController: NavHostController) {
                 },
                 trailingContent = {
                     Text(
-                        text = hu?.score.toString()
+                        text = hu?.totalScore.toString()
                     )
                 }
             )

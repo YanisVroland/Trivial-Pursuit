@@ -36,10 +36,7 @@ fun UserBody(navController: NavController) {
     val iconList = listOf(R.drawable._1, R.drawable._2, R.drawable._3,R.drawable._4, R.drawable._5, R.drawable._6,R.drawable._7, R.drawable._8)
     val viewModel = hiltViewModel<MainPageViewModel>()
     var expanded by remember { mutableStateOf(false) }
-
-    val test = viewModel.user.collectAsState().value
-    var currentUser by remember { mutableStateOf (test) }
-
+    val user = viewModel.user.collectAsState().value
 
     Column(
         modifier = Modifier
@@ -51,7 +48,7 @@ fun UserBody(navController: NavController) {
 
         Box(modifier = Modifier.wrapContentSize()) {
             Image(
-                painter = painterResource(currentUser.avatar),
+                painter = painterResource(R.drawable._1),
                 contentDescription = "Avatar",
                 modifier = Modifier
                     .size(120.dp)
@@ -82,7 +79,6 @@ fun UserBody(navController: NavController) {
                 ) {
                     iconList.forEach { icon ->
                         DropdownMenuItem(onClick = {
-                            currentUser = currentUser.copy(avatar = icon)
                         }, text = {
                             Image(
                                 painter = painterResource(icon),
@@ -99,7 +95,7 @@ fun UserBody(navController: NavController) {
         Spacer(modifier = Modifier.height(64.dp))
 
         CustomOutlinedTextField(
-            value = currentUser.pseudo,
+            value = user.pseudo,
             onValueChange = { },
             label = { Text("Pseudo") },
             modifier = Modifier.fillMaxWidth()
