@@ -29,6 +29,8 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
     var _questions: List<Result> = listOf()
     var currentIndex = 0
 
+    val allUsers: StateFlow<List<UserFirebase?>> = userFirebaseRepository.getAll().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
     private val _user = MutableStateFlow<UserFirebase>(UserFirebase())
     val user: StateFlow<UserFirebase>
     get() = _user
