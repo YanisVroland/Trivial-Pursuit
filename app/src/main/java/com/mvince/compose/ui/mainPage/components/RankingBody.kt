@@ -68,6 +68,7 @@ fun RankingBody(navController: NavHostController) {
     ) {
         Text(
             text = "CLASSEMENT",
+            color = Color.LightGray,
             fontSize = 30.sp,
             textAlign = TextAlign.Center
         )
