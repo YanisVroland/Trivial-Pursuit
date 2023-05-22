@@ -38,7 +38,7 @@ fun GameBody(navController: NavController) {
     val viewModel = hiltViewModel<MainPageViewModel>()
     val question = viewModel.question.collectAsState().value
     val totalScore = viewModel.totalScore.collectAsState().value
-    val answers = question?.incorrectAnswers?.plus(question?.correctAnswer)?.shuffled()
+    val answers = viewModel.answers.collectAsState().value
     val isCorrect = viewModel.isCorrect.collectAsState().value
 
 

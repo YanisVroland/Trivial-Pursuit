@@ -37,6 +37,10 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
     val question: StateFlow<Result?>
     get() = _question
 
+    private val _answers = MutableStateFlow<List<String>>(listOf<String>())
+    val answers: StateFlow<List<String>>
+    get() = _answers
+
     private val _isCorrect = MutableStateFlow<Boolean?>(null)
     val isCorrect: StateFlow<Boolean?>
     get() = _isCorrect
@@ -55,6 +59,8 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
                     questionsFirebaseRepository.importDailyQuestions(_questions)
                 }
                 _question.value = _questions.first()
+                _answers.value =
+                    question?.value?.incorrectAnswers?.plus(question?.value!!.correctAnswer)?.shuffled()!!
             }
         }
         viewModelScope.launch(Dispatchers.IO) {
@@ -79,6 +85,8 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
             currentIndex ++
             if(currentIndex < _questions.size){
                 _question.value = _questions[currentIndex]
+                _answers.value =
+                    question?.value?.incorrectAnswers?.plus(question?.value!!.correctAnswer)?.shuffled()!!
             }
             _isCorrect.value = null
             answered = false
