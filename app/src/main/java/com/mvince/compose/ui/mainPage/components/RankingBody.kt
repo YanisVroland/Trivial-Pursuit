@@ -27,7 +27,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mvince.compose.R
+import com.mvince.compose.domain.UserFirebase
 import com.mvince.compose.ui.signin.SigninViewModel
+import com.mvince.compose.ui.mainPage.MainPageViewModel
 import java.util.concurrent.Flow
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,18 +37,17 @@ import java.util.concurrent.Flow
 @Composable
 fun RankingBody(navController: NavHostController) {
 
-    val viewModel = hiltViewModel<SigninViewModel>()
-    var user by remember { mutableStateOf("") }
+    val mainModel = hiltViewModel<MainPageViewModel>()
 
     data class member(val name: String, val score: Int)
-
+    val huh = mainModel.allUsers.collectAsState().value
     var cpt = 0
     val TitleModifier = Modifier
         .fillMaxWidth()
         .padding(vertical = 20.dp)
     val cardModifier = Modifier
         .fillMaxWidth()
-    val test = listOf<member>(
+    /*val test = listOf<member>(
         member("Pipoune", 500),
         member("Yanis", 500),
         member("David", 500),
@@ -61,7 +62,7 @@ fun RankingBody(navController: NavHostController) {
         member("You", 1),
         member("You", 1),
         member("You", 1),
-    );
+    );*/
     Column(
         modifier = TitleModifier, horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -77,7 +78,7 @@ fun RankingBody(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        items(test) { hu ->
+        items(huh) { hu ->
             cpt += 1
             ListItem(
                 modifier = cardModifier,
@@ -99,13 +100,13 @@ fun RankingBody(navController: NavHostController) {
                         )
                         Spacer(modifier = Modifier.width(5.dp))
                         Text(
-                            text = hu.name.toString()
+                            text = hu?.pseudo.toString()
                         )
                     }
                 },
                 trailingContent = {
                     Text(
-                        text = hu.score.toString()
+                        text = hu?.score.toString()
                     )
                 }
             )

@@ -11,7 +11,7 @@ private val DarkColorPalette = darkColorScheme(
     background = Color.DarkGray,
     surface = surfaceDarkmode, // surface blanche (par défaut)
     onPrimary = Color.LightGray, // texte blanc sur fond primaire
-    onSecondary = Color.LightGray, // texte noir sur fond secondaire
+    onSecondary = Color.DarkGray, // texte noir sur fond secondaire
     onBackground = Color.LightGray, // texte noir sur fond de base
     onSurface = Color.LightGray // texte noir sur surface
 )
