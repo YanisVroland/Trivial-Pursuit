@@ -4,8 +4,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
 import com.mvince.compose.domain.UserFirebase
 import com.mvince.compose.repository.QuestionsApiRepository
 import com.mvince.compose.network.model.Result
@@ -29,7 +27,7 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
     var _questions: List<Result> = listOf()
     var currentIndex = 0
 
-    val allUsers: StateFlow<List<UserFirebase?>> = userFirebaseRepository.getAll().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+    val allUsers: StateFlow<List<UserFirebase?>> = userFirebaseRepository.getAllSortedByTotalScore().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     private val _user = MutableStateFlow<UserFirebase>(UserFirebase())
     val user: StateFlow<UserFirebase>

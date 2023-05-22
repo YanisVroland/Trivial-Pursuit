@@ -1,6 +1,7 @@
 package com.mvince.compose.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.snapshots
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
@@ -20,8 +21,8 @@ class UserFirebaseRepository @Inject constructor(private val firestore: Firebase
       return firestore.collection(_collection).document(id).snapshots().first().toObject<UserFirebase>()
     }
 
-    fun getAll(): Flow<List<UserFirebase>> {
-        return firestore.collection(_collection).snapshots().map { it.toObjects<UserFirebase>() }
+    fun getAllSortedByTotalScore(): Flow<List<UserFirebase>> {
+        return firestore.collection(_collection).orderBy("totalScore", Query.Direction.DESCENDING).snapshots().map { it.toObjects<UserFirebase>() }
     }
 
     companion object {
