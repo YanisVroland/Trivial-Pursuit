@@ -42,8 +42,8 @@ class UserFirebaseRepository @Inject constructor(private val firestore: Firebase
         return user
     }
 
-    suspend fun updateUser(id: String, updatedUser: UserFirebase) {
-        firestore.collection(_collection).document(id).set(updatedUser)
+    fun updateUser(id: String, updatedUser: UserFirebase) : Boolean{
+        return firestore.collection(_collection).document(id).update(mapOf("pseudo" to updatedUser.pseudo,"totalScore" to updatedUser.totalScore,"avatar" to updatedUser.avatar)).isSuccessful
     }
 
     fun getAllSortedByTotalScore(): Flow<List<UserFirebase>> {

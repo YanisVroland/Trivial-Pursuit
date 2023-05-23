@@ -35,7 +35,6 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
     var currentIndex = 0
 
     val allUsers: StateFlow<List<UserFirebase?>> = userFirebaseRepository.getAllSortedByTotalScore().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
-
     val allUsersDaily: StateFlow<List<UserFirebase?>> = userFirebaseRepository.getAllSortedByDailyScore().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     private val _user = MutableStateFlow<UserFirebase>(UserFirebase())
@@ -53,6 +52,10 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
     private val _isCorrect = MutableStateFlow<Boolean?>(null)
     val isCorrect: StateFlow<Boolean?>
     get() = _isCorrect
+
+    private val _updateIsCorrect = MutableStateFlow<Boolean?>(null)
+    val updateIsCorrect: StateFlow<Boolean?>
+        get() = _updateIsCorrect
 
     private val _totalScore = MutableStateFlow<Int>(0)
     val totalScore: StateFlow<Int>
@@ -109,9 +112,11 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
     }
 
     fun updateUserScore() {
-        userFirebaseRepository.setDailyScore(_totalScore.value)
-        userFirebaseRepository.updateUserDailyScore(repository.currentUser!!.uid, _totalScore.value)
-    }
+        viewModelScope.launch(Dispatchers.IO) {
+            userFirebaseRepository.setDailyScore(_totalScore.value)
+            userFirebaseRepository.updateUserDailyScore(repository.currentUser!!.uid, _totalScore.value)
+        }
+      }
 
     fun logout() {
         repository.logout();
@@ -121,7 +126,8 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
         viewModelScope.launch(Dispatchers.IO) {
             val userId = repository.currentUser?.uid
             if (userId != null) {
-                userFirebaseRepository.updateUser(userId,user)
+                _user.value.avatar = user.avatar
+                _updateIsCorrect.value = userFirebaseRepository.updateUser(userId,user)
             }
         }
     }

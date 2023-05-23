@@ -2,6 +2,7 @@ package com.mvince.compose.ui.mainPage.components
 
 import android.annotation.SuppressLint
 import android.content.res.AssetManager
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,6 +26,7 @@ import com.mvince.compose.ui.mainPage.MainPageViewModel
 import com.mvince.compose.ui.theme.invalidButton
 import com.mvince.compose.ui.theme.lambdaButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
@@ -48,6 +50,7 @@ fun UserBody(navController: NavController) {
     var ifModified by remember { mutableStateOf<Boolean>(false) }
 
     val user = viewModel.user.collectAsState().value
+    val updateIsCorrect = viewModel.updateIsCorrect.collectAsState().value
 
     var avatar by remember { mutableStateOf<Int?>(null) }
     var pseudo by remember { mutableStateOf<String>("") }
@@ -56,7 +59,7 @@ fun UserBody(navController: NavController) {
 
     LaunchedEffect(user) {
         user?.let { userResource ->
-            if (userResource != null  ) {
+            if (userResource != null) {
                 pseudo = userResource.pseudo
                 totalScore = userResource.totalScore
             }
@@ -187,6 +190,14 @@ fun UserBody(navController: NavController) {
             }
         }, colors = ButtonDefaults.buttonColors(containerColor = invalidButton)) {
             Text("Déconnexion")
+        }
+        if (updateIsCorrect != null) {
+            if (updateIsCorrect) {
+                Toast.makeText(LocalContext.current, "Profil mis à jour !", Toast.LENGTH_SHORT).show()
+                ifModified = false
+            }else{
+                Toast.makeText(LocalContext.current, "Une erreur est surevenue !", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
