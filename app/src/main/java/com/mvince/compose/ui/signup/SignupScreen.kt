@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -58,7 +59,7 @@ fun SignupScreen(navController: NavHostController) {
         }
     }
 
-    if(errorFlow !=null){
+    if (errorFlow != null) {
         errorMessage = when (errorFlow.errorCode) {
             "ERROR_EMAIL_ALREADY_IN_USE" -> {
                 "Cette adresse e-mail est déjà associée à un autre compte."
@@ -84,16 +85,21 @@ fun SignupScreen(navController: NavHostController) {
         return emailValid && passwordValid;
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "Test APP") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "")
-                    }
-                })
-        },
+    Scaffold(topBar = {
+        CenterAlignedTopAppBar(
+            title = {
+                Text(
+                    text = "TRIVIAL PURSUIT",
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "")
+                }
+            })
+    }
     ) {
 
         Column(

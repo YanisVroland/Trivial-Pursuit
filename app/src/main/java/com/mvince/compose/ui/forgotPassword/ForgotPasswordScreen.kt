@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,7 +45,7 @@ fun ForgotPasswordScreen(navController: NavHostController) {
         }
     }
 
-    if(errorFlow !=null){
+    if (errorFlow != null) {
         errorMessage = when (errorFlow.errorCode) {
             "ERROR_INVALID_EMAIL" -> {
                 "L'adresse e-mail n'est pas valide."
@@ -60,59 +61,67 @@ fun ForgotPasswordScreen(navController: NavHostController) {
 
 
     Scaffold(topBar = {
-        TopAppBar(title = { Text(text = "Test APP") }, navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "")
-            }
-        })
+        CenterAlignedTopAppBar(
+            title = {
+                Text(
+                    text = "TRIVIAL PURSUIT",
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "")
+                }
+            })
     }
     ) {
-            Column(
-                Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    "Mot de passe oublié ?", style = TextStyle(
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily.SansSerif
-                    )
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                "Mot de passe oublié ?", style = TextStyle(
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.SansSerif
                 )
+            )
 
-                Spacer(modifier = Modifier.height(30.dp))
-                if (errorMessage.isNotEmpty()) Text(
-                    errorMessage, color = MaterialTheme.colorScheme.error, style = TextStyle(
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily.SansSerif
-                    )
-                ) else Spacer(modifier = Modifier.height(15.dp))
-                Spacer(modifier = Modifier.height(30.dp))
-
-                CustomOutlinedTextField(
-                    value = email,
-                    isErrorValue = !emailValid,
-                    onValueChange = { email = it },
-                    label = { Text(text = "Mail") },
+            Spacer(modifier = Modifier.height(30.dp))
+            if (errorMessage.isNotEmpty()) Text(
+                errorMessage, color = MaterialTheme.colorScheme.error, style = TextStyle(
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.SansSerif
                 )
-                Spacer(modifier = Modifier.height(64.dp))
-                CustomButton(
-                    title = "Envoyer",
-                    onClick = {
-                        emailValid = email.matches(emailRegex);
-                        if (emailValid) {
-                            viewModel.resetPassword(email.trim())
-                        } else {
-                            errorMessage = "Il y a une erreur de saisie"
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                )
+            ) else Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
-            }
+            CustomOutlinedTextField(
+                value = email,
+                isErrorValue = !emailValid,
+                onValueChange = { email = it },
+                label = { Text(text = "Mail") },
+            )
+            Spacer(modifier = Modifier.height(64.dp))
+            CustomButton(
+                title = "Envoyer",
+                onClick = {
+                    emailValid = email.matches(emailRegex);
+                    if (emailValid) {
+                        viewModel.resetPassword(email.trim())
+                    } else {
+                        errorMessage = "Il y a une erreur de saisie"
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+        }
     }
 
 }

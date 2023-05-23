@@ -21,6 +21,10 @@ class UserFirebaseRepository @Inject constructor(private val firestore: Firebase
       return firestore.collection(_collection).document(id).snapshots().first().toObject<UserFirebase>()
     }
 
+    suspend fun updateUser(id: String, updatedUser: UserFirebase) {
+        firestore.collection(_collection).document(id).set(updatedUser)
+    }
+
     fun getAllSortedByTotalScore(): Flow<List<UserFirebase>> {
         return firestore.collection(_collection).orderBy("totalScore", Query.Direction.DESCENDING).snapshots().map { it.toObjects<UserFirebase>() }
     }

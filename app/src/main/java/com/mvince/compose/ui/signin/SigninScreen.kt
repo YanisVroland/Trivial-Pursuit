@@ -85,12 +85,12 @@ fun LoginScreen(navController: NavHostController) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "APP TEST",
+                        text = "TRIVIAL PURSUIT",
                         textAlign = TextAlign.Center,
-                    )
+                        fontWeight = FontWeight.Bold                    )
                 }
             )
         },

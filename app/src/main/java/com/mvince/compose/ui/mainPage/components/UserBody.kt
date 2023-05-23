@@ -49,6 +49,8 @@ fun UserBody(navController: NavController) {
 
     var avatar by remember { mutableStateOf<Int?>(null) }
 
+    var ifModified by remember { mutableStateOf<Boolean>(false) }
+
 
     Column(
         modifier = Modifier
@@ -93,6 +95,7 @@ fun UserBody(navController: NavController) {
                     iconList.forEach { icon ->
                         DropdownMenuItem(onClick = {
                             avatar = iconList.indexOf(icon)
+                            ifModified = true
                         }, text = {
                             Image(
                                 painter = painterResource(icon),
@@ -105,7 +108,7 @@ fun UserBody(navController: NavController) {
             }
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(42.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -113,7 +116,7 @@ fun UserBody(navController: NavController) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text("Score total : ${user.totalScore}")
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(10.dp))
             Box(
                 modifier = Modifier
                     .size(32.dp)
@@ -122,7 +125,10 @@ fun UserBody(navController: NavController) {
                     .padding(3.dp)
             ) {
                 IconButton(
-                    onClick = {},
+                    onClick = {
+                        ifModified = true
+
+                    },
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.cached),
@@ -145,7 +151,10 @@ fun UserBody(navController: NavController) {
 
         Button(
             colors = ButtonDefaults.buttonColors(containerColor = lambdaButton),
-            onClick = { }) {
+            enabled = ifModified,
+            onClick = {
+                viewModel.updateUser(user)
+            }) {
             Text(text = "Envoyer modification")
             Icon(
                 painter = painterResource(id = R.drawable.levaitaico),

@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuthException
 import com.mvince.compose.R
 import com.mvince.compose.domain.UserFirebase
 import com.mvince.compose.repository.QuestionsApiRepository
@@ -105,6 +106,15 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
 
     fun logout() {
         repository.logout();
+    }
+
+    fun updateUser(user: UserFirebase) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val userId = repository.currentUser?.uid
+            if (userId != null) {
+                userFirebaseRepository.updateUser(userId,user)
+            }
+        }
     }
 
 
