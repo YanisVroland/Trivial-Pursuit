@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -28,6 +29,9 @@ import com.mvince.compose.R
 import com.mvince.compose.domain.UserFirebase
 import com.mvince.compose.ui.signin.SigninViewModel
 import com.mvince.compose.ui.mainPage.MainPageViewModel
+import com.mvince.compose.ui.theme.blueTrivial
+import com.mvince.compose.ui.theme.primary
+import com.mvince.compose.ui.theme.primaryDarkmode
 import java.util.concurrent.Flow
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,6 +42,7 @@ fun RankingBody(navController: NavHostController) {
     val mainModel = hiltViewModel<MainPageViewModel>()
 
     data class member(val name: String, val score: Int)
+
     val huh = mainModel.allUsers.collectAsState().value
     val hah = mainModel.allUsersDaily.collectAsState().value
     val TitleModifier = Modifier
@@ -46,12 +51,17 @@ fun RankingBody(navController: NavHostController) {
     val cardModifier = Modifier
         .fillMaxWidth()
     var colorT = Color.Black
+    var colorButtons = primary
+    val itemsList = listOf<String>("Global Ranking", "Daily Ranking")
+
     var switchOn by remember {
         mutableStateOf(true)
     }
-    if(isSystemInDarkTheme()){
+    if (isSystemInDarkTheme()) {
         colorT = Color.LightGray
+        colorButtons = primaryDarkmode
     }
+    var selectedIndex by remember { mutableStateOf(1) }
     /*val test = listOf<member>(
         member("Pipoune", 500),
         member("Yanis", 500),
@@ -68,101 +78,164 @@ fun RankingBody(navController: NavHostController) {
         member("You", 1),
         member("You", 1),
     );*/
-    Column(
-        modifier = TitleModifier, horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Switch(
-            checked = switchOn,
-            onCheckedChange = { switchOn_ ->
-                switchOn = switchOn_
-            }
-        )
-        Text(
-            text = "CLASSEMENT",
-            color = colorT,
-            fontSize = 30.sp,
-            textAlign = TextAlign.Center
-        )
-    }
-
-    if(switchOn){
-        LazyColumn(
-            Modifier.padding(horizontal = 16.dp, vertical = 90.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+    Column() {
+        Column(
+            modifier = TitleModifier, horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            items(hah) { hu ->
-                ListItem(
-                    modifier = cardModifier,
-                    leadingContent = {
-                        Text(
-                            text = (hah.indexOf(hu)+1).toString()
-                        )
 
+            Text(
+                text = "CLASSEMENT",
+                color = colorT,
+                fontSize = 30.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.Top,
+
+            ) {
+
+            val cornerRadius = 16.dp
+
+            itemsList.forEachIndexed { index, item ->
+
+                OutlinedButton(
+                    onClick = { selectedIndex = index },
+                    modifier = when (index) {
+                        0 ->
+                            Modifier
+                                .offset(0.dp, 0.dp)
+                                .zIndex(if (selectedIndex == index) 1f else 0f)
+                        else ->
+                            Modifier
+                                .offset((-1 * index).dp, 0.dp)
+                                .zIndex(if (selectedIndex == index) 1f else 0f)
                     },
-                    headlineText = {
-                        Row() {
-                            Image(
-                                painter = painterResource(R.drawable._2),
-                                contentDescription = "Avatar",
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .clip(CircleShape)
-                                    .border(1.dp, Color.Gray, CircleShape)
-                            )
-                            Spacer(modifier = Modifier.width(5.dp))
-                            Text(
-                                text = hu?.pseudo.toString()
-                            )
+                    shape = when (index) {
+                        0 -> RoundedCornerShape(
+                            topStart = cornerRadius,
+                            topEnd = 0.dp,
+                            bottomStart = cornerRadius,
+                            bottomEnd = 0.dp
+                        )
+                        itemsList.size - 1 -> RoundedCornerShape(
+                            topStart = 0.dp,
+                            topEnd = cornerRadius,
+                            bottomStart = 0.dp,
+                            bottomEnd = cornerRadius
+                        )
+                        else -> RoundedCornerShape(
+                            topStart = 0.dp,
+                            topEnd = 0.dp,
+                            bottomStart = 0.dp,
+                            bottomEnd = 0.dp
+                        )
+                    },
+                    border = BorderStroke(
+                        1.dp, if (selectedIndex == index) {
+                            colorButtons
+                        } else {
+                            colorButtons.copy(alpha = 0.75f)
                         }
-                    },
-                    trailingContent = {
-                        Text(
-                            text = hu?.dailyScore.toString()
+                    ),
+                    colors = if (selectedIndex == index) {
+                        ButtonDefaults.outlinedButtonColors(
+                            containerColor = colorButtons.copy(alpha = 0.8f),
+                            contentColor = colorT
+                        )
+                    } else {
+                        ButtonDefaults.outlinedButtonColors(
+                            containerColor = MaterialTheme.colorScheme.surface,
+                            contentColor = colorT
                         )
                     }
-                )
+                ) {
+                    Text(item.toString())
+                }
             }
         }
-    }else{
-        LazyColumn(
-            Modifier.padding(horizontal = 16.dp, vertical = 90.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            items(huh) { hu ->
-                ListItem(
-                    modifier = cardModifier,
-                    leadingContent = {
-                        Text(
-                            text = (huh.indexOf(hu)+1).toString()
-                        )
 
-                    },
-                    headlineText = {
-                        Row() {
-                            Image(
-                                painter = painterResource(R.drawable._2),
-                                contentDescription = "Avatar",
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .clip(CircleShape)
-                                    .border(1.dp, Color.Gray, CircleShape)
-                            )
-                            Spacer(modifier = Modifier.width(5.dp))
+        if (selectedIndex == 1) {
+            LazyColumn(
+                Modifier.padding(horizontal = 16.dp, vertical = 30.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                items(hah) { hu ->
+                    ListItem(
+                        modifier = cardModifier,
+                        leadingContent = {
                             Text(
-                                text = hu?.pseudo.toString()
+                                text = (hah.indexOf(hu) + 1).toString()
+                            )
+
+                        },
+                        headlineText = {
+                            Row() {
+                                Image(
+                                    painter = painterResource(R.drawable._2),
+                                    contentDescription = "Avatar",
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .clip(CircleShape)
+                                        .border(1.dp, Color.Gray, CircleShape)
+                                )
+                                Spacer(modifier = Modifier.width(5.dp))
+                                Text(
+                                    text = hu?.pseudo.toString()
+                                )
+                            }
+                        },
+                        trailingContent = {
+                            Text(
+                                text = hu?.dailyScore.toString()
                             )
                         }
-                    },
-                    trailingContent = {
-                        Text(
-                            text = hu?.totalScore.toString()
-                        )
-                    }
-                )
+                    )
+                }
+            }
+        } else {
+            LazyColumn(
+                Modifier.padding(horizontal = 16.dp, vertical = 30.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ) {
+                items(huh) { hu ->
+                    ListItem(
+                        modifier = cardModifier,
+                        leadingContent = {
+                            Text(
+                                text = (huh.indexOf(hu) + 1).toString()
+                            )
+
+                        },
+                        headlineText = {
+                            Row() {
+                                Image(
+                                    painter = painterResource(R.drawable._2),
+                                    contentDescription = "Avatar",
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .clip(CircleShape)
+                                        .border(1.dp, Color.Gray, CircleShape)
+                                )
+                                Spacer(modifier = Modifier.width(5.dp))
+                                Text(
+                                    text = hu?.pseudo.toString()
+                                )
+                            }
+                        },
+                        trailingContent = {
+                            Text(
+                                text = hu?.totalScore.toString()
+                            )
+                        }
+                    )
+                }
             }
         }
     }
 }
-
