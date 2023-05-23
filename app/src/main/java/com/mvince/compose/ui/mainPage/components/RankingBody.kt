@@ -38,11 +38,7 @@ import java.util.concurrent.Flow
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun RankingBody(navController: NavHostController) {
-
     val mainModel = hiltViewModel<MainPageViewModel>()
-
-    data class member(val name: String, val score: Int)
-
     val huh = mainModel.allUsers.collectAsState().value
     val hah = mainModel.allUsersDaily.collectAsState().value
     val TitleModifier = Modifier
@@ -53,31 +49,23 @@ fun RankingBody(navController: NavHostController) {
     var colorT = Color.Black
     var colorButtons = primary
     val itemsList = listOf<String>("Global Ranking", "Daily Ranking")
+    val iconList = listOf(
+        R.drawable._1,
+        R.drawable._2,
+        R.drawable._3,
+        R.drawable._4,
+        R.drawable._5,
+        R.drawable._6,
+        R.drawable._7,
+        R.drawable._8
+    )
 
-    var switchOn by remember {
-        mutableStateOf(true)
-    }
     if (isSystemInDarkTheme()) {
         colorT = Color.LightGray
         colorButtons = primaryDarkmode
     }
     var selectedIndex by remember { mutableStateOf(1) }
-    /*val test = listOf<member>(
-        member("Pipoune", 500),
-        member("Yanis", 500),
-        member("David", 500),
-        member("You", 1),
-        member("You", 1),
-        member("You", 1),
-        member("You", 1),
-        member("You", 1),
-        member("You", 1),
-        member("You", 1),
-        member("You", 1),
-        member("You", 1),
-        member("You", 1),
-        member("You", 1),
-    );*/
+
     Column() {
         Column(
             modifier = TitleModifier, horizontalAlignment = Alignment.CenterHorizontally
@@ -176,7 +164,7 @@ fun RankingBody(navController: NavHostController) {
                         headlineText = {
                             Row() {
                                 Image(
-                                    painter = painterResource(R.drawable._2),
+                                    painter = painterResource(iconList[hu!!.avatar]),
                                     contentDescription = "Avatar",
                                     modifier = Modifier
                                         .size(24.dp)
@@ -215,7 +203,7 @@ fun RankingBody(navController: NavHostController) {
                         headlineText = {
                             Row() {
                                 Image(
-                                    painter = painterResource(R.drawable._2),
+                                    painterResource(iconList[hu!!.avatar]),
                                     contentDescription = "Avatar",
                                     modifier = Modifier
                                         .size(24.dp)
