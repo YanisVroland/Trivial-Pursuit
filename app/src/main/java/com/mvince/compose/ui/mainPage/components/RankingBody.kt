@@ -65,7 +65,7 @@ fun RankingBody(navController: NavHostController) {
         colorButtons = primaryDarkmode
     }
     var selectedIndex by remember { mutableStateOf(1) }
-
+    
     Column() {
         Column(
             modifier = TitleModifier, horizontalAlignment = Alignment.CenterHorizontally
@@ -145,84 +145,54 @@ fun RankingBody(navController: NavHostController) {
                 }
             }
         }
-
-        if (selectedIndex == 1) {
-            LazyColumn(
-                Modifier.padding(horizontal = 16.dp, vertical = 30.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
-            ) {
-                items(hah) { hu ->
-                    ListItem(
-                        modifier = cardModifier,
-                        leadingContent = {
+        LazyColumn(
+            Modifier.padding(horizontal = 16.dp, vertical = 30.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            items(if(selectedIndex == 0)huh else hah) { hu ->
+                ListItem(
+                    modifier = cardModifier,
+                    leadingContent = {
+                        if(selectedIndex == 0){
+                            Text(
+                                text = (huh.indexOf(hu) + 1).toString()
+                            )
+                        }else{
                             Text(
                                 text = (hah.indexOf(hu) + 1).toString()
                             )
+                        }
 
-                        },
-                        headlineText = {
-                            Row() {
-                                Image(
-                                    painter = painterResource(iconList[hu!!.avatar]),
-                                    contentDescription = "Avatar",
-                                    modifier = Modifier
-                                        .size(24.dp)
-                                        .clip(CircleShape)
-                                        .border(1.dp, Color.Gray, CircleShape)
-                                )
-                                Spacer(modifier = Modifier.width(5.dp))
-                                Text(
-                                    text = hu?.pseudo.toString()
-                                )
-                            }
-                        },
-                        trailingContent = {
+                    },
+                    headlineText = {
+                        Row() {
+                            Image(
+                                painter = painterResource(iconList[hu!!.avatar]),
+                                contentDescription = "Avatar",
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .clip(CircleShape)
+                                    .border(1.dp, Color.Gray, CircleShape)
+                            )
+                            Spacer(modifier = Modifier.width(5.dp))
+                            Text(
+                                text = hu?.pseudo.toString()
+                            )
+                        }
+                    },
+                    trailingContent = {
+                        if(selectedIndex == 0){
+                            Text(
+                                text = hu?.totalScore.toString()
+                            )
+                        }else{
                             Text(
                                 text = hu?.dailyScore.toString()
                             )
                         }
-                    )
-                }
-            }
-        } else {
-            LazyColumn(
-                Modifier.padding(horizontal = 16.dp, vertical = 30.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
-            ) {
-                items(huh) { hu ->
-                    ListItem(
-                        modifier = cardModifier,
-                        leadingContent = {
-                            Text(
-                                text = (huh.indexOf(hu) + 1).toString()
-                            )
-
-                        },
-                        headlineText = {
-                            Row() {
-                                Image(
-                                    painterResource(iconList[hu!!.avatar]),
-                                    contentDescription = "Avatar",
-                                    modifier = Modifier
-                                        .size(24.dp)
-                                        .clip(CircleShape)
-                                        .border(1.dp, Color.Gray, CircleShape)
-                                )
-                                Spacer(modifier = Modifier.width(5.dp))
-                                Text(
-                                    text = hu?.pseudo.toString()
-                                )
-                            }
-                        },
-                        trailingContent = {
-                            Text(
-                                text = hu?.totalScore.toString()
-                            )
-                        }
-                    )
-                }
+                    }
+                )
             }
         }
     }
