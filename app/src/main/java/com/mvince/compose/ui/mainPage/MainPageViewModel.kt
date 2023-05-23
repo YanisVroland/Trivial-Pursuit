@@ -58,6 +58,10 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
     val totalScore: StateFlow<Int>
         get() = _totalScore
 
+    private val _finalScore = MutableStateFlow<Int>(userFirebaseRepository.getDailyScore())
+    val finalScore: StateFlow<Int>
+    get() = _finalScore
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             questionsFirebaseRepository.getDailyQuestions().collect() {
@@ -102,6 +106,11 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
             _isCorrect.value = null
             answered = false
         }
+    }
+
+    fun updateUserScore() {
+        userFirebaseRepository.setDailyScore(_totalScore.value)
+        userFirebaseRepository.updateUserDailyScore(repository.currentUser!!.uid, _user.value.dailyScore)
     }
 
     fun logout() {

@@ -3,11 +3,14 @@ package com.mvince.compose.ui.mainPage.components
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -152,7 +155,7 @@ fun GameBody(navController: NavController) {
                     Button(
                         colors = ButtonDefaults.buttonColors(containerColor = lambdaButton),
                         onClick = {
-
+                            viewModel.updateUserScore()
                             navController.navigate(Route.ENDGAME)
                         }) {
                         Text(text = "Terminer le quizz")

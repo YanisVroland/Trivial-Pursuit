@@ -20,7 +20,7 @@ import com.mvince.compose.ui.theme.lambdaButton
 
 fun GameEndBody(navController: NavController) {
     val viewModel = hiltViewModel<MainPageViewModel>()
-    val totalScore = viewModel.totalScore.collectAsState().value
+    val totalScore = viewModel.finalScore.collectAsState().value
 
     Column(modifier = Modifier
         .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {

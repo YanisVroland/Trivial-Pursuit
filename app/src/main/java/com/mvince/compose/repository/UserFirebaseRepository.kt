@@ -10,11 +10,26 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class UserFirebaseRepository @Inject constructor(private val firestore: FirebaseFirestore) {
+
+    private var dailyScore: Int = 0
+
+    fun getDailyScore() = dailyScore
+
+    fun setDailyScore(newScore: Int) {
+        this.dailyScore = newScore
+    }
 
     fun insertUser(id:String, user: UserFirebase) : Boolean {
          return firestore.collection(_collection).document(id).set(user).isSuccessful
+    }
+
+    fun updateUserDailyScore(id:String, dailyScore : Int) : Boolean {
+        this.dailyScore = dailyScore
+        return firestore.collection(_collection).document(id).update(mapOf("dailyScore" to dailyScore)).isSuccessful
     }
 
     suspend fun getUser(id: String): UserFirebase? {
