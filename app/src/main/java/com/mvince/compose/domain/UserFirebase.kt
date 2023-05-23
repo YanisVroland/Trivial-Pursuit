@@ -1,6 +1,5 @@
 package com.mvince.compose.domain
 
-import com.mvince.compose.R
 
 data class UserFirebase(
     var pseudo: String,
@@ -10,4 +9,6 @@ data class UserFirebase(
     var avatar: Int = 1
 ){
     constructor() : this("Unknow", "Unknow@gmail.com", 0,0, 1)
+
+    constructor(pseudo: String, totalScore: Int, avatar: Int) : this(pseudo, "", totalScore, 0, avatar)
 }

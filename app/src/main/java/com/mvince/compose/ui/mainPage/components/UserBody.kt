@@ -45,11 +45,23 @@ fun UserBody(navController: NavController) {
     )
     val viewModel = hiltViewModel<MainPageViewModel>()
     var expanded by remember { mutableStateOf(false) }
+    var ifModified by remember { mutableStateOf<Boolean>(false) }
+
     val user = viewModel.user.collectAsState().value
 
     var avatar by remember { mutableStateOf<Int?>(null) }
+    var pseudo by remember { mutableStateOf<String>("") }
+    var totalScore by remember { mutableStateOf<Int>(0) }
 
-    var ifModified by remember { mutableStateOf<Boolean>(false) }
+
+    LaunchedEffect(user) {
+        user?.let { userResource ->
+            if (userResource != null  ) {
+                pseudo = userResource.pseudo
+                totalScore = userResource.totalScore
+            }
+        }
+    }
 
 
     Column(
@@ -115,7 +127,7 @@ fun UserBody(navController: NavController) {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Score total : ${user.totalScore}")
+            Text("Score total : ${totalScore}")
             Spacer(modifier = Modifier.width(10.dp))
             Box(
                 modifier = Modifier
@@ -126,8 +138,8 @@ fun UserBody(navController: NavController) {
             ) {
                 IconButton(
                     onClick = {
+                        totalScore = 0;
                         ifModified = true
-
                     },
                 ) {
                     Icon(
@@ -142,8 +154,11 @@ fun UserBody(navController: NavController) {
         Spacer(modifier = Modifier.height(22.dp))
 
         CustomOutlinedTextField(
-            value = user.pseudo,
-            onValueChange = { },
+            value = pseudo.ifEmpty { user.pseudo },
+            onValueChange = {
+                pseudo = it
+                ifModified = true
+            },
             label = { Text("Pseudo") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -153,7 +168,7 @@ fun UserBody(navController: NavController) {
             colors = ButtonDefaults.buttonColors(containerColor = lambdaButton),
             enabled = ifModified,
             onClick = {
-                viewModel.updateUser(user)
+                viewModel.updateUser(UserFirebase(pseudo, totalScore, avatar ?: user.avatar))
             }) {
             Text(text = "Envoyer modification")
             Icon(
@@ -165,7 +180,6 @@ fun UserBody(navController: NavController) {
 
         Button(onClick = {
             viewModel.logout()
-
             navController.navigate(Route.LOGIN) {
                 popUpTo(navController.graph.id) {
                     inclusive = true
