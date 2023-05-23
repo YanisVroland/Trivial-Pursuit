@@ -9,6 +9,7 @@ import com.mvince.compose.domain.UserFirebase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,6 +17,7 @@ import javax.inject.Singleton
 class UserFirebaseRepository @Inject constructor(private val firestore: FirebaseFirestore) {
 
     private var dailyScore: Int = 0
+    private var totalScore: Int = 0
 
     fun getDailyScore() = dailyScore
 
@@ -29,11 +31,15 @@ class UserFirebaseRepository @Inject constructor(private val firestore: Firebase
 
     fun updateUserDailyScore(id:String, dailyScore : Int) : Boolean {
         this.dailyScore = dailyScore
-        return firestore.collection(_collection).document(id).update(mapOf("dailyScore" to dailyScore)).isSuccessful
+        this.totalScore += dailyScore
+        val date = LocalDate.now().toString()
+        return firestore.collection(_collection).document(id).update(mapOf("dailyScore" to dailyScore,"lastGameDate" to date,"totalScore" to this.totalScore)).isSuccessful
     }
 
     suspend fun getUser(id: String): UserFirebase? {
-      return firestore.collection(_collection).document(id).snapshots().first().toObject<UserFirebase>()
+        val user =  firestore.collection(_collection).document(id).snapshots().first().toObject<UserFirebase>()
+        this.totalScore = user!!.totalScore
+        return user
     }
 
     suspend fun updateUser(id: String, updatedUser: UserFirebase) {

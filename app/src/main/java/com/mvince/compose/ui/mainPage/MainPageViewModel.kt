@@ -110,7 +110,7 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
 
     fun updateUserScore() {
         userFirebaseRepository.setDailyScore(_totalScore.value)
-        userFirebaseRepository.updateUserDailyScore(repository.currentUser!!.uid, _user.value.dailyScore)
+        userFirebaseRepository.updateUserDailyScore(repository.currentUser!!.uid, _totalScore.value)
     }
 
     fun logout() {
