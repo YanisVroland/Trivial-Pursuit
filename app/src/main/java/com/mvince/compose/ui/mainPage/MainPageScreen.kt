@@ -6,9 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -21,7 +19,6 @@ import com.mvince.compose.ui.mainPage.components.GameStartBody
 import com.mvince.compose.ui.mainPage.components.UserBody
 import com.mvince.compose.ui.ranking.RankingBody
 import com.mvince.compose.ui.theme.JetpackComposeBoilerplateTheme
-import kotlin.contracts.Returns
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -29,6 +26,7 @@ import kotlin.contracts.Returns
 
 fun MainPageScreen(navController: NavHostController) {
 
+    val viewModel = hiltViewModel<MainPageViewModel>()
     val appNavController = rememberNavController()
     val selectedTab = remember { mutableStateOf(Route.GAME) }
 
@@ -47,10 +45,10 @@ fun MainPageScreen(navController: NavHostController) {
                         )
                     }, label = { Text(text = "Profil") })
                     NavigationBarItem(
-                        selected = selectedTab.value == Route.GAME,
+                        selected = selectedTab.value == Route.STARTGAME,
                         onClick = {
-                            selectedTab.value = Route.GAME
-                            appNavController.navigate(Route.GAME)
+                            selectedTab.value = Route.STARTGAME
+                            appNavController.navigate(Route.STARTGAME)
                         },
                         icon = {
                             Icon(
@@ -80,7 +78,7 @@ fun MainPageScreen(navController: NavHostController) {
                 startDestination = Route.STARTGAME
             ) {
                 composable(Route.STARTGAME) {
-                    GameStartBody(navController = appNavController)
+                    GameStartBody(navController = navController)
                 }
                 composable(Route.USER) {
                     UserBody(navController = navController)

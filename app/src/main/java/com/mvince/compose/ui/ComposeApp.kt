@@ -8,6 +8,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mvince.compose.ui.forgotPassword.ForgotPasswordScreen
 import com.mvince.compose.ui.mainPage.MainPageScreen
+import com.mvince.compose.ui.mainPage.components.GameBody
+import com.mvince.compose.ui.mainPage.components.GameEndBody
 import com.mvince.compose.ui.signin.LoginScreen
 import com.mvince.compose.ui.signup.SignupScreen
 
@@ -27,7 +29,9 @@ fun ComposeApp() {
         navController = navController,
         startDestination = startRedirection()
     ) {
-        composable(route = Route.MAINPAGE) { MainPageScreen(navController)}
+        composable(route = Route.MAINPAGE) {MainPageScreen(navController)}
+        composable(route = Route.GAME) {GameBody(navController)}
+        composable(route = Route.ENDGAME) { GameEndBody(navController)}
         composable(route = Route.LOGIN) { LoginScreen(navController) }
         composable(route = Route.REGISTER) { SignupScreen(navController) }
         composable(route = Route.FORGOTPASSWORD) { ForgotPasswordScreen(navController) }

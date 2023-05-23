@@ -5,8 +5,6 @@ import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuthException
-import com.mvince.compose.R
 import com.mvince.compose.domain.UserFirebase
 import com.mvince.compose.repository.QuestionsApiRepository
 import com.mvince.compose.network.model.Result
@@ -131,6 +129,5 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
             }
         }
     }
-
 
 }

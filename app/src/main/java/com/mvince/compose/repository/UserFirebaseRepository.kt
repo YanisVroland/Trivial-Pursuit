@@ -18,11 +18,18 @@ class UserFirebaseRepository @Inject constructor(private val firestore: Firebase
 
     private var dailyScore: Int = 0
     private var totalScore: Int = 0
+    private var isPlaying: Boolean = false
 
     fun getDailyScore() = dailyScore
 
     fun setDailyScore(newScore: Int) {
         this.dailyScore = newScore
+    }
+
+    fun getIsPlaying() = isPlaying
+
+    fun setIsPlaying(playing: Boolean) {
+        isPlaying = playing
     }
 
     fun insertUser(id:String, user: UserFirebase) : Boolean {
