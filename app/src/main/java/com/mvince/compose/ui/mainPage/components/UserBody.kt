@@ -1,7 +1,6 @@
 package com.mvince.compose.ui.mainPage.components
 
 import android.annotation.SuppressLint
-import android.content.res.AssetManager
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,9 +26,6 @@ import com.mvince.compose.ui.theme.invalidButton
 import com.mvince.compose.ui.theme.lambdaButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import coil.compose.rememberImagePainter
-import coil.transform.CircleCropTransformation
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnrememberedMutableState")
@@ -47,25 +43,22 @@ fun UserBody(navController: NavController) {
     )
     val viewModel = hiltViewModel<MainPageViewModel>()
     var expanded by remember { mutableStateOf(false) }
-    var ifModified by remember { mutableStateOf<Boolean>(false) }
+    var ifModified by remember { mutableStateOf(false) }
 
     val user = viewModel.user.collectAsState().value
     val updateIsCorrect = viewModel.updateIsCorrect.collectAsState().value
     var pseudoValid by remember { mutableStateOf(true) }
     var avatar by remember { mutableStateOf<Int?>(null) }
-    var pseudo by remember { mutableStateOf<String>("") }
-    var totalScore by remember { mutableStateOf<Int>(0) }
+    var pseudo by remember { mutableStateOf("") }
+    var totalScore by remember { mutableStateOf(0) }
 
 
     LaunchedEffect(user) {
-        user?.let { userResource ->
-            if (userResource != null) {
-                pseudo = userResource.pseudo
-                totalScore = userResource.totalScore
-            }
+        user.let { userResource ->
+            pseudo = userResource.pseudo
+            totalScore = userResource.totalScore
         }
     }
-
 
     Column(
         modifier = Modifier
@@ -130,7 +123,7 @@ fun UserBody(navController: NavController) {
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Score total : ${totalScore}")
+            Text("Score total : $totalScore")
             Spacer(modifier = Modifier.width(10.dp))
             Box(
                 modifier = Modifier
@@ -141,7 +134,7 @@ fun UserBody(navController: NavController) {
             ) {
                 IconButton(
                     onClick = {
-                        totalScore = 0;
+                        totalScore = 0
                         ifModified = true
                     },
                 ) {
@@ -197,7 +190,7 @@ fun UserBody(navController: NavController) {
             Toast.makeText(LocalContext.current, "Profil mis à jour !", Toast.LENGTH_SHORT)
                 .show()
             ifModified = false
-            viewModel.stopToast();
+            viewModel.stopToast()
         }
     }
 }
