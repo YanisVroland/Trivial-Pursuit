@@ -19,8 +19,8 @@ class SignupViewModel @Inject constructor(
     private val authRepository: AuthFirebaseRepository
 ) : ViewModel() {
 
-    private val _isAuthentificated = MutableStateFlow<Boolean>(false)
-    val isAuthentificated: StateFlow<Boolean>
+    private val _isAuthentificated = MutableStateFlow<Boolean?>(null)
+    val isAuthentificated: StateFlow<Boolean?>
         get() = _isAuthentificated
 
     private val _errorFlow = MutableStateFlow<FirebaseAuthException?>(null)
@@ -32,8 +32,7 @@ class SignupViewModel @Inject constructor(
             try {
                 val uid = authRepository.signup(email, password)?.uid
                 if (uid != null) {
-                    _isAuthentificated.value =
-                        firebaseRepository.insertUser(uid, UserFirebase(pseudo, email));
+                    _isAuthentificated.value = firebaseRepository.insertUser(uid, UserFirebase(pseudo, email));
                 }
             } catch (e: FirebaseAuthException) {
                 _errorFlow.value = e

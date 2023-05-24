@@ -22,11 +22,11 @@ import javax.inject.Inject
 @HiltViewModel
 class MainPageViewModel @Inject constructor(private val questionsFirebaseRepository: QuestionsFirebaseRepository, private val questionsAPIRepository: QuestionsApiRepository, private val repository: AuthFirebaseRepository, private val userFirebaseRepository: UserFirebaseRepository) : ViewModel() {
 
-    val SCORE_INCREMENT = 10
+    private val SCORE_INCREMENT = 10
 
     var answered = false
 
-    val cardColors = listOf<Color>(pinkTrivial, purpleTrivial, greenTrivial, blueTrivial, yellowTrivial, orangeTrivial)
+    private val cardColors = listOf(pinkTrivial, purpleTrivial, greenTrivial, blueTrivial, yellowTrivial, orangeTrivial)
     var currentCardColor: Color = Color.LightGray
 
     var _questions: List<Result> = listOf()
@@ -35,7 +35,7 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
     val allUsers: StateFlow<List<UserFirebase?>> = userFirebaseRepository.getAllSortedByTotalScore().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
     val allUsersDaily: StateFlow<List<UserFirebase?>> = userFirebaseRepository.getAllSortedByDailyScore().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    private val _user = MutableStateFlow<UserFirebase>(UserFirebase())
+    private val _user = MutableStateFlow(UserFirebase())
     val user: StateFlow<UserFirebase>
     get() = _user
 
@@ -43,7 +43,7 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
     val question: StateFlow<Result?>
     get() = _question
 
-    private val _answers = MutableStateFlow<List<String>>(listOf<String>())
+    private val _answers = MutableStateFlow(listOf<String>())
     val answers: StateFlow<List<String>>
     get() = _answers
 
@@ -55,17 +55,17 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
     val updateIsCorrect: StateFlow<Boolean?>
         get() = _updateIsCorrect
 
-    private val _totalScore = MutableStateFlow<Int>(0)
+    private val _totalScore = MutableStateFlow(0)
     val totalScore: StateFlow<Int>
         get() = _totalScore
 
-    private val _finalScore = MutableStateFlow<Int>(userFirebaseRepository.getDailyScore())
+    private val _finalScore = MutableStateFlow(userFirebaseRepository.getDailyScore())
     val finalScore: StateFlow<Int>
     get() = _finalScore
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            questionsFirebaseRepository.getDailyQuestions().collect() {
+            questionsFirebaseRepository.getDailyQuestions().collect {
                 if (it != null) {
                     _questions = it.questionsWithAnswers
                 }else {
@@ -74,7 +74,7 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
                 }
                 _question.value = _questions.first()
                 _answers.value =
-                    question?.value?.incorrectAnswers?.plus(question?.value!!.correctAnswer)?.shuffled()!!
+                    question.value?.incorrectAnswers?.plus(question.value!!.correctAnswer)?.shuffled()!!
                 currentCardColor = cardColors.shuffled().first()
             }
         }
@@ -88,7 +88,7 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
     }
 
     fun validateAnswer(answer: String){
-        _isCorrect.update { answer.equals(question.value?.correctAnswer) }
+        _isCorrect.update { answer == question.value?.correctAnswer }
         if(_isCorrect.value == true) {
             _totalScore.value += SCORE_INCREMENT
         }
@@ -101,7 +101,7 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
             if(currentIndex < _questions.size){
                 _question.value = _questions[currentIndex]
                 _answers.value =
-                    question?.value?.incorrectAnswers?.plus(question?.value!!.correctAnswer)?.shuffled()!!
+                    question.value?.incorrectAnswers?.plus(question.value!!.correctAnswer)?.shuffled()!!
                 currentCardColor = cardColors.shuffled().first()
             }
             _isCorrect.value = null
@@ -117,7 +117,7 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
       }
 
     fun logout() {
-        repository.logout();
+        repository.logout()
     }
 
     fun updateUser(user: UserFirebase) {
