@@ -130,4 +130,8 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
         }
     }
 
+    fun stopToast(){
+        _updateIsCorrect.value = null
+    }
+
 }

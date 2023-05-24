@@ -51,7 +51,7 @@ fun UserBody(navController: NavController) {
 
     val user = viewModel.user.collectAsState().value
     val updateIsCorrect = viewModel.updateIsCorrect.collectAsState().value
-
+    var pseudoValid by remember { mutableStateOf(true) }
     var avatar by remember { mutableStateOf<Int?>(null) }
     var pseudo by remember { mutableStateOf<String>("") }
     var totalScore by remember { mutableStateOf<Int>(0) }
@@ -157,7 +157,8 @@ fun UserBody(navController: NavController) {
         Spacer(modifier = Modifier.height(22.dp))
 
         CustomOutlinedTextField(
-            value = pseudo.ifEmpty { user.pseudo },
+            value = pseudo,
+            isErrorValue = !pseudoValid,
             onValueChange = {
                 pseudo = it
                 ifModified = true
@@ -171,7 +172,8 @@ fun UserBody(navController: NavController) {
             colors = ButtonDefaults.buttonColors(containerColor = lambdaButton),
             enabled = ifModified,
             onClick = {
-                viewModel.updateUser(UserFirebase(pseudo, totalScore, avatar ?: user.avatar))
+                pseudoValid = pseudo.isNotEmpty()
+                if(pseudoValid) viewModel.updateUser(UserFirebase(pseudo, totalScore, avatar ?: user.avatar)) else ifModified = false
             }) {
             Text(text = "Envoyer modification")
             Icon(
@@ -192,12 +194,10 @@ fun UserBody(navController: NavController) {
             Text("Déconnexion")
         }
         if (updateIsCorrect != null) {
-            if (updateIsCorrect) {
-                Toast.makeText(LocalContext.current, "Profil mis à jour !", Toast.LENGTH_SHORT).show()
-                ifModified = false
-            }else{
-                Toast.makeText(LocalContext.current, "Une erreur est surevenue !", Toast.LENGTH_SHORT).show()
-            }
+            Toast.makeText(LocalContext.current, "Profil mis à jour !", Toast.LENGTH_SHORT)
+                .show()
+            ifModified = false
+            viewModel.stopToast();
         }
     }
 }
