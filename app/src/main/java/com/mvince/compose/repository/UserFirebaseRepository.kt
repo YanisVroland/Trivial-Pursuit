@@ -58,7 +58,8 @@ class UserFirebaseRepository @Inject constructor(private val firestore: Firebase
     }
 
     fun getAllSortedByDailyScore(): Flow<List<UserFirebase>> {
-        return firestore.collection(_collection).orderBy("dailyScore", Query.Direction.DESCENDING).snapshots().map { it.toObjects<UserFirebase>() }
+        val todaysDate = LocalDate.now().toString()
+        return firestore.collection(_collection).orderBy("dailyScore", Query.Direction.DESCENDING).whereEqualTo("lastGameDate", todaysDate).snapshots().map { it.toObjects<UserFirebase>() }
     }
 
     companion object {

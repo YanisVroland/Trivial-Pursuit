@@ -8,8 +8,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -18,7 +16,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.*
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,21 +23,17 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.mvince.compose.R
-import com.mvince.compose.domain.UserFirebase
-import com.mvince.compose.ui.signin.SigninViewModel
 import com.mvince.compose.ui.mainPage.MainPageViewModel
-import com.mvince.compose.ui.theme.blueTrivial
 import com.mvince.compose.ui.theme.primary
 import com.mvince.compose.ui.theme.primaryDarkmode
-import java.util.concurrent.Flow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun RankingBody(navController: NavHostController) {
     val mainModel = hiltViewModel<MainPageViewModel>()
-    val huh = mainModel.allUsers.collectAsState().value
-    val hah = mainModel.allUsersDaily.collectAsState().value
+    val totalScoreList = mainModel.allUsers.collectAsState().value
+    val dailyScoreList = mainModel.allUsersDaily.collectAsState().value
     val TitleModifier = Modifier
         .fillMaxWidth()
         .padding(vertical = 20.dp)
@@ -145,22 +138,27 @@ fun RankingBody(navController: NavHostController) {
                 }
             }
         }
+        if(dailyScoreList.isEmpty()) {
+            Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceAround, horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(textAlign = TextAlign.Center, text = "Personne n'a encore joué aujourd'hui !")
+            }
+        }
         LazyColumn(
             Modifier.padding(horizontal = 16.dp, vertical = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
-            items(if(selectedIndex == 0)huh else hah) { hu ->
+            items(if(selectedIndex == 0)totalScoreList else dailyScoreList) { score ->
                 ListItem(
                     modifier = cardModifier,
                     leadingContent = {
                         if(selectedIndex == 0){
                             Text(
-                                text = (huh.indexOf(hu) + 1).toString()
+                                text = (totalScoreList.indexOf(score) + 1).toString()
                             )
                         }else{
                             Text(
-                                text = (hah.indexOf(hu) + 1).toString()
+                                text = (dailyScoreList.indexOf(score) + 1).toString()
                             )
                         }
 
@@ -168,7 +166,7 @@ fun RankingBody(navController: NavHostController) {
                     headlineText = {
                         Row() {
                             Image(
-                                painter = painterResource(iconList[hu!!.avatar]),
+                                painter = painterResource(iconList[score!!.avatar]),
                                 contentDescription = "Avatar",
                                 modifier = Modifier
                                     .size(24.dp)
@@ -177,18 +175,18 @@ fun RankingBody(navController: NavHostController) {
                             )
                             Spacer(modifier = Modifier.width(5.dp))
                             Text(
-                                text = hu?.pseudo.toString()
+                                text = score?.pseudo.toString()
                             )
                         }
                     },
                     trailingContent = {
                         if(selectedIndex == 0){
                             Text(
-                                text = hu?.totalScore.toString()
+                                text = score?.totalScore.toString()
                             )
                         }else{
                             Text(
-                                text = hu?.dailyScore.toString()
+                                text = score?.dailyScore.toString()
                             )
                         }
                     }
