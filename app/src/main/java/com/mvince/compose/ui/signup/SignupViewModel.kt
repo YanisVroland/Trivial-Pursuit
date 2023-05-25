@@ -32,7 +32,7 @@ class SignupViewModel @Inject constructor(
             try {
                 val uid = authRepository.signup(email, password)?.uid
                 if (uid != null) {
-                    _isAuthentificated.value = firebaseRepository.insertUser(uid, UserFirebase(pseudo, email));
+                    _isAuthentificated.value = firebaseRepository.insertUser(uid, UserFirebase(pseudo, email))
                 }
             } catch (e: FirebaseAuthException) {
                 _errorFlow.value = e

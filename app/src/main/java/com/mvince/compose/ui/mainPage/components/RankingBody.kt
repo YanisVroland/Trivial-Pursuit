@@ -1,4 +1,4 @@
-package com.mvince.compose.ui.ranking
+package com.mvince.compose.ui.mainPage.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.*
@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.mvince.compose.R
 import com.mvince.compose.ui.mainPage.MainPageViewModel
 import com.mvince.compose.ui.theme.primary
@@ -30,7 +29,7 @@ import com.mvince.compose.ui.theme.primaryDarkmode
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun RankingBody(navController: NavHostController) {
+fun RankingBody() {
     val mainModel = hiltViewModel<MainPageViewModel>()
     val totalScoreList = mainModel.allUsers.collectAsState().value
     val dailyScoreList = mainModel.allUsersDaily.collectAsState().value
@@ -41,7 +40,7 @@ fun RankingBody(navController: NavHostController) {
         .fillMaxWidth()
     var colorT = Color.Black
     var colorButtons = primary
-    val itemsList = listOf<String>("Global Ranking", "Daily Ranking")
+    val itemsList = listOf("Global Ranking", "Daily Ranking")
     val iconList = listOf(
         R.drawable._1,
         R.drawable._2,
@@ -134,7 +133,7 @@ fun RankingBody(navController: NavHostController) {
                         )
                     }
                 ) {
-                    Text(item.toString())
+                    Text(item)
                 }
             }
         }
@@ -175,7 +174,7 @@ fun RankingBody(navController: NavHostController) {
                             )
                             Spacer(modifier = Modifier.width(5.dp))
                             Text(
-                                text = score?.pseudo.toString()
+                                text = score.pseudo
                             )
                         }
                     },

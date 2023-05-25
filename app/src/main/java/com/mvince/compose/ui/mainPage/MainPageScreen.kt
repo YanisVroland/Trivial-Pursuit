@@ -3,7 +3,6 @@ package com.mvince.compose.ui.mainPage
 import android.annotation.SuppressLint
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.painterResource
@@ -17,7 +16,7 @@ import com.mvince.compose.ui.mainPage.components.GameBody
 import com.mvince.compose.ui.mainPage.components.GameEndBody
 import com.mvince.compose.ui.mainPage.components.GameStartBody
 import com.mvince.compose.ui.mainPage.components.UserBody
-import com.mvince.compose.ui.ranking.RankingBody
+import com.mvince.compose.ui.mainPage.components.RankingBody
 import com.mvince.compose.ui.theme.JetpackComposeBoilerplateTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,7 +25,7 @@ import com.mvince.compose.ui.theme.JetpackComposeBoilerplateTheme
 
 fun MainPageScreen(navController: NavHostController) {
 
-    val viewModel = hiltViewModel<MainPageViewModel>()
+    hiltViewModel<MainPageViewModel>()
     val appNavController = rememberNavController()
     val selectedTab = remember { mutableStateOf(Route.GAME) }
 
@@ -90,7 +89,7 @@ fun MainPageScreen(navController: NavHostController) {
                     GameEndBody(navController = appNavController)
                 }
                 composable(Route.RANKING) {
-                    RankingBody(navController = appNavController)
+                    RankingBody()
                 }
             }
         }

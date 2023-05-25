@@ -21,13 +21,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.mvince.compose.ui.components.CustomButton
-import com.mvince.compose.ui.components.CustomOutlinedTextField
+import androidx.navigation.NavHostController
 import com.mvince.compose.R
 import com.mvince.compose.ui.Route
-import androidx.navigation.NavHostController
+import com.mvince.compose.ui.components.CustomButton
+import com.mvince.compose.ui.components.CustomOutlinedTextField
 import com.mvince.compose.ui.theme.linkColor
-import java.text.Normalizer.Form
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -49,10 +48,8 @@ fun LoginScreen(navController: NavHostController) {
     val errorFlow = viewModel.errorFlow.collectAsState().value
 
     LaunchedEffect(authResource) {
-        authResource?.let { authResource ->
-            if (authResource != null ) {
-                navController.navigate(Route.MAINPAGE)
-            }
+        authResource?.let {
+            navController.navigate(Route.MAINPAGE)
         }
     }
 
@@ -80,7 +77,7 @@ fun LoginScreen(navController: NavHostController) {
         emailValid = email.matches(emailRegex)
         passwordValid = password.matches(passwordRegex)
 
-        return emailValid && passwordValid;
+        return emailValid && passwordValid
     }
 
     Scaffold(

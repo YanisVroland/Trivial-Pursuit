@@ -20,11 +20,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.mvince.compose.ui.components.CustomButton
-import com.mvince.compose.ui.components.CustomOutlinedTextField
 import com.mvince.compose.R
 import com.mvince.compose.ui.Route
-import kotlinx.coroutines.launch
+import com.mvince.compose.ui.components.CustomButton
+import com.mvince.compose.ui.components.CustomOutlinedTextField
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -52,10 +51,8 @@ fun SignupScreen(navController: NavHostController) {
     val errorFlow = viewModel.errorFlow.collectAsState().value
 
     LaunchedEffect(authResource) {
-        authResource?.let { authResource ->
-            if (authResource != null) {
-                navController.navigate(Route.LOGIN)
-            }
+        authResource?.let {
+            navController.navigate(Route.LOGIN)
         }
     }
 
@@ -82,7 +79,7 @@ fun SignupScreen(navController: NavHostController) {
         password2Valid = password2.matches(passwordRegex) && password == password2
         pseudoValid = pseudo.isNotEmpty()
 
-        return emailValid && passwordValid;
+        return emailValid && passwordValid
     }
 
     Scaffold(topBar = {

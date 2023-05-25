@@ -21,7 +21,6 @@ import androidx.navigation.NavHostController
 import com.mvince.compose.ui.Route
 import com.mvince.compose.ui.components.CustomButton
 import com.mvince.compose.ui.components.CustomOutlinedTextField
-import com.mvince.compose.ui.components.NoNetwork
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -111,7 +110,7 @@ fun ForgotPasswordScreen(navController: NavHostController) {
             CustomButton(
                 title = "Envoyer",
                 onClick = {
-                    emailValid = email.matches(emailRegex);
+                    emailValid = email.matches(emailRegex)
                     if (emailValid) {
                         viewModel.resetPassword(email.trim())
                     } else {

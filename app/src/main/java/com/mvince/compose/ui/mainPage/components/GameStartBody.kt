@@ -25,8 +25,7 @@ fun GameStartBody(navController: NavController) {
     val alreadyPlayed = viewModel.user.collectAsState().value.lastGameDate == LocalDate.now().toString()
 
     Column(modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
+        .fillMaxWidth().padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
         AsyncImage(
             modifier = Modifier
                 .padding(vertical = 93.dp)

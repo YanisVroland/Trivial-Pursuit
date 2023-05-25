@@ -1,8 +1,6 @@
 package com.mvince.compose.di
 
 import com.mvince.compose.BuildConfig
-import com.mvince.compose.network.DetailsApi
-import com.mvince.compose.network.UsersApi
 import com.mvince.compose.network.QuestionsOfTheDayApi
 import dagger.Module
 import dagger.Provides
@@ -42,16 +40,9 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideApiService(retrofit: Retrofit): UsersApi = retrofit.create(UsersApi::class.java)
-
-    @Provides
-    @Singleton
     fun provideQuestionsOfTheDayApiService(retrofit: Retrofit): QuestionsOfTheDayApi =
         retrofit.create(QuestionsOfTheDayApi::class.java)
 
-    @Provides
-    @Singleton
-    fun provideUserDetailsService(retrofit: Retrofit): DetailsApi =
-        retrofit.create(DetailsApi::class.java)
+
 
 }

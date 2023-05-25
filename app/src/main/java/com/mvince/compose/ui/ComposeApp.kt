@@ -70,6 +70,3 @@ object Route {
     const val ENDGAME = "endgame"
 }
 
-object Argument {
-    const val USERNAME = "username"
-}

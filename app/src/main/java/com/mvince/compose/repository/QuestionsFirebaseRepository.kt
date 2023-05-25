@@ -3,11 +3,8 @@ package com.mvince.compose.repository
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.getField
 import com.google.firebase.firestore.ktx.snapshots
-import com.google.firebase.firestore.ktx.toObject
 import com.mvince.compose.network.model.FirebaseQuestions
-import com.mvince.compose.util.formatDate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate

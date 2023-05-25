@@ -105,34 +105,29 @@ fun GameBody(navController: NavController) {
                     )
                 }
                 Spacer(modifier = Modifier.size(20.dp))
-                if (answers != null) {
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2)
-                    ) {
-                        items(answers) { answer ->
-                            if (answer != null) {
-                                var correct: Color
-                                if(answer == question.correctAnswer) {
-                                    correct = validButton
-                                }else {
-                                    correct = invalidButton
-                                }
-                                Button(
-                                    modifier = Modifier
-                                        .padding(10.dp)
-                                        .shadow(
-                                            spotColor = Color.Black,
-                                            elevation = 5.dp,
-                                            shape = RoundedCornerShape(16.dp),
-                                            ambientColor = Color.Gray
-                                        ),
-                                    colors = ButtonDefaults.buttonColors(disabledContainerColor = correct, disabledContentColor = Color.White),
-                                    onClick = { viewModel.validateAnswer(answer) },
-                                    enabled = !viewModel.answered
-                                ) {
-                                    Text(text = answer)
-                                }
-                            }
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2)
+                ) {
+                    items(answers) { answer ->
+                        val correct: Color = if(answer == question.correctAnswer) {
+                            validButton
+                        }else {
+                            invalidButton
+                        }
+                        Button(
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .shadow(
+                                    spotColor = Color.Black,
+                                    elevation = 5.dp,
+                                    shape = RoundedCornerShape(16.dp),
+                                    ambientColor = Color.Gray
+                                ),
+                            colors = ButtonDefaults.buttonColors(disabledContainerColor = correct, disabledContentColor = Color.White),
+                            onClick = { viewModel.validateAnswer(answer) },
+                            enabled = !viewModel.answered
+                        ) {
+                            Text(text = answer)
                         }
                     }
                 }

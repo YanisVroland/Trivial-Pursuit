@@ -18,18 +18,10 @@ class UserFirebaseRepository @Inject constructor(private val firestore: Firebase
 
     private var dailyScore: Int = 0
     private var totalScore: Int = 0
-    private var isPlaying: Boolean = false
-
     fun getDailyScore() = dailyScore
 
     fun setDailyScore(newScore: Int) {
         this.dailyScore = newScore
-    }
-
-    fun getIsPlaying() = isPlaying
-
-    fun setIsPlaying(playing: Boolean) {
-        isPlaying = playing
     }
 
     fun insertUser(id:String, user: UserFirebase) : Boolean {
@@ -43,7 +35,7 @@ class UserFirebaseRepository @Inject constructor(private val firestore: Firebase
         return firestore.collection(_collection).document(id).update(mapOf("dailyScore" to dailyScore,"lastGameDate" to date,"totalScore" to this.totalScore)).isSuccessful
     }
 
-    suspend fun getUser(id: String): UserFirebase? {
+    suspend fun getUser(id: String): UserFirebase {
         val user =  firestore.collection(_collection).document(id).snapshots().first().toObject<UserFirebase>()
         this.totalScore = user!!.totalScore
         return user
@@ -54,12 +46,12 @@ class UserFirebaseRepository @Inject constructor(private val firestore: Firebase
     }
 
     fun getAllSortedByTotalScore(): Flow<List<UserFirebase>> {
-        return firestore.collection(_collection).orderBy("totalScore", Query.Direction.DESCENDING).snapshots().map { it.toObjects<UserFirebase>() }
+        return firestore.collection(_collection).whereGreaterThan("totalScore", 0) .orderBy("totalScore", Query.Direction.DESCENDING).snapshots().map { it.toObjects() }
     }
 
     fun getAllSortedByDailyScore(): Flow<List<UserFirebase>> {
         val todaysDate = LocalDate.now().toString()
-        return firestore.collection(_collection).orderBy("dailyScore", Query.Direction.DESCENDING).whereEqualTo("lastGameDate", todaysDate).snapshots().map { it.toObjects<UserFirebase>() }
+        return firestore.collection(_collection).orderBy("dailyScore", Query.Direction.DESCENDING).whereEqualTo("lastGameDate", todaysDate).snapshots().map { it.toObjects() }
     }
 
     companion object {
