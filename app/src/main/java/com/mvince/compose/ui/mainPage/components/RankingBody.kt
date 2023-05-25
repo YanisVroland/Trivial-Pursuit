@@ -138,7 +138,7 @@ fun RankingBody(navController: NavHostController) {
                 }
             }
         }
-        if(dailyScoreList.isEmpty()) {
+        if(dailyScoreList.isEmpty() && selectedIndex != 0) {
             Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceAround, horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(textAlign = TextAlign.Center, text = "Personne n'a encore joué aujourd'hui !")
             }

@@ -34,7 +34,7 @@ fun GameEndBody(navController: NavController) {
         Spacer(modifier = Modifier.size(40.dp))
         Text(textAlign = TextAlign.Center, text = "Vous avez répondu à toutes les questions du jour !")
         Spacer(modifier = Modifier.size(20.dp))
-        Text(textAlign = TextAlign.Center, text = "Score total : $totalScore")
+        Text(textAlign = TextAlign.Center, text = "Score : $totalScore")
         Button(modifier = Modifier.padding(20.dp),onClick = { navController.navigate(Route.MAINPAGE) }) {
             Text(text = "Accueil")
         }
