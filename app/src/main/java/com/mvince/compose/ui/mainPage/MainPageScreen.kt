@@ -27,7 +27,7 @@ fun MainPageScreen(navController: NavHostController) {
 
     hiltViewModel<MainPageViewModel>()
     val appNavController = rememberNavController()
-    val selectedTab = remember { mutableStateOf(Route.GAME) }
+    val selectedTab = remember { mutableStateOf(Route.STARTGAME) }
 
     JetpackComposeBoilerplateTheme() {
         Scaffold(

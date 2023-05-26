@@ -13,6 +13,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -146,6 +147,7 @@ fun SignupScreen(navController: NavHostController) {
                 value = password,
                 onValueChange = { password = it },
                 label = { Text(text = "Mot de passe") },
+                keyboardType = KeyboardType.Password,
                 isErrorValue = !passwordValid,
                 visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
@@ -172,6 +174,7 @@ fun SignupScreen(navController: NavHostController) {
                 value = password2,
                 onValueChange = { password2 = it },
                 label = { Text(text = "Mot de passe ") },
+                keyboardType = KeyboardType.Password,
                 isErrorValue = !password2Valid,
                 visualTransformation = if (showPassword2) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
