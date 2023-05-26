@@ -49,7 +49,11 @@ fun LoginScreen(navController: NavHostController) {
 
     LaunchedEffect(authResource) {
         authResource?.let {
-            navController.navigate(Route.MAINPAGE)
+            navController.navigate(Route.MAINPAGE){
+                popUpTo(navController.graph.id) {
+                    inclusive = true
+                }
+            }
         }
     }
 
