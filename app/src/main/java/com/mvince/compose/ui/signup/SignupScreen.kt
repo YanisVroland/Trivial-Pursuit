@@ -1,6 +1,7 @@
 package com.mvince.compose.ui.signup
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -8,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -202,6 +204,9 @@ fun SignupScreen(navController: NavHostController) {
                 },
                 modifier = Modifier.fillMaxWidth(),
             )
+        }
+        if (authResource != null) {
+            Toast.makeText(LocalContext.current, "Inscription validée !", Toast.LENGTH_SHORT).show()
         }
     }
 }

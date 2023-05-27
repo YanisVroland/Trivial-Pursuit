@@ -2,6 +2,7 @@ package com.mvince.compose.ui.forgotPassword
 
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -10,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -119,7 +121,9 @@ fun ForgotPasswordScreen(navController: NavHostController) {
                 },
                 modifier = Modifier.fillMaxWidth(),
             )
-
+        }
+        if (resetPasswordFlow != null) {
+            Toast.makeText(LocalContext.current, "Email envoyé !", Toast.LENGTH_SHORT).show()
         }
     }
 
