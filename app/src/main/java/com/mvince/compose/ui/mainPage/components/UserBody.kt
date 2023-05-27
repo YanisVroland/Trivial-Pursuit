@@ -190,7 +190,7 @@ fun UserBody(navController: NavController) {
             Toast.makeText(LocalContext.current, "Profil mis à jour !", Toast.LENGTH_SHORT)
                 .show()
             ifModified = false
-            viewModel.stopToast()
+            viewModel.stopToastUpdate()
         }
     }
 }

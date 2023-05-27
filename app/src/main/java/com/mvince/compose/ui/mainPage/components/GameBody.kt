@@ -187,6 +187,7 @@ fun GameBody(navController: NavController) {
         if (isCorrect != null) {
             if (isCorrect) {
                 Toast.makeText(LocalContext.current, "+ 10 !", Toast.LENGTH_SHORT).show()
+                viewModel.stopToastQuestion()
             }
         }
         Spacer(modifier = Modifier.height(20.dp))
