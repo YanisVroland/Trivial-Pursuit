@@ -39,9 +39,11 @@ fun GameStartBody(navController: NavController) {
         }
         Spacer(modifier = Modifier.size(40.dp))
         Button(colors = ButtonDefaults.buttonColors(containerColor = lambdaButton), enabled = !alreadyPlayed, onClick = {
-            navController.navigate(
-                Route.GAME
-            )
+            navController.navigate(Route.GAME){
+                popUpTo(navController.graph.id) {
+                    inclusive = true
+                }
+            }
         }) {
             Text(text = "Démarrer une partie")
         }
