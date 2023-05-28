@@ -1,5 +1,6 @@
 package com.mvince.compose.ui.mainPage.components
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -15,6 +16,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.mvince.compose.ui.Route
 import com.mvince.compose.ui.mainPage.MainPageViewModel
+import com.mvince.compose.ui.theme.dlambdaButton
 import com.mvince.compose.ui.theme.lambdaButton
 import java.time.LocalDate
 
@@ -23,9 +25,14 @@ import java.time.LocalDate
 fun GameStartBody(navController: NavController) {
     val viewModel = hiltViewModel<MainPageViewModel>()
     val alreadyPlayed = viewModel.user.collectAsState().value.lastGameDate == LocalDate.now().toString()
+    var classicB = lambdaButton
+    if(isSystemInDarkTheme()){
+        classicB = dlambdaButton
+    }
 
     Column(modifier = Modifier
-        .fillMaxWidth().padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
+        .fillMaxWidth()
+        .padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Top) {
         AsyncImage(
             modifier = Modifier
                 .padding(vertical = 93.dp)
@@ -38,7 +45,7 @@ fun GameStartBody(navController: NavController) {
             Text(textAlign = TextAlign.Center, text = "Vous avez déjà joué aujourd'hui, revenez demain pour une nouvelle partie !")
         }
         Spacer(modifier = Modifier.size(40.dp))
-        Button(colors = ButtonDefaults.buttonColors(containerColor = lambdaButton), enabled = !alreadyPlayed, onClick = {
+        Button(colors = ButtonDefaults.buttonColors(containerColor = classicB), enabled = !alreadyPlayed, onClick = {
             navController.navigate(Route.GAME){
                 popUpTo(navController.graph.id) {
                     inclusive = true

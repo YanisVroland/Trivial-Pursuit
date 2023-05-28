@@ -5,6 +5,7 @@ import android.text.Html
 import android.widget.Toast
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,13 +27,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.mvince.compose.R
 import com.mvince.compose.ui.Route
-import com.mvince.compose.ui.theme.JetpackComposeBoilerplateTheme
-import com.mvince.compose.ui.theme.invalidButton
-import com.mvince.compose.ui.theme.lambdaButton
-import com.mvince.compose.ui.theme.validButton
+import com.mvince.compose.ui.theme.*
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,6 +51,18 @@ fun GameScreen(navController: NavHostController) {
         animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
     ).value
     var isPaused by remember { mutableStateOf(false) }
+    var cardColors = viewModel.currentCardColor
+    var validB = validButton
+    var invalidB = invalidButton
+    var classicB = lambdaButton
+    var scoreCircleColor = Color.LightGray
+    if(isSystemInDarkTheme()){
+        cardColors = viewModel.darkCurrentCardColor
+        validB = dvalidButton
+        invalidB = dinvalidButton
+        classicB = dlambdaButton
+        scoreCircleColor = darkmodeCircleGameWallpaper
+    }
 
 
     LaunchedEffect(viewModel.currentIndex) {
@@ -87,7 +98,7 @@ fun GameScreen(navController: NavHostController) {
                             .padding(16.dp)
                             .drawBehind {
                                 drawCircle(
-                                    color = Color.LightGray,
+                                    color = scoreCircleColor,
                                     radius = this.size.minDimension + 5
                                 )
                             }
@@ -115,7 +126,7 @@ fun GameScreen(navController: NavHostController) {
                 Spacer(modifier = Modifier.height(40.dp))
                 if (question != null) {
                     Text(
-                        color = viewModel.currentCardColor,
+                        color = cardColors,
                         text = question.category,
                         style = TextStyle(
                             fontWeight = FontWeight.Bold,
@@ -130,7 +141,7 @@ fun GameScreen(navController: NavHostController) {
                                 RoundedCornerShape(10.dp),
                             )
                             .border(2.dp, Color.Black, RoundedCornerShape(10.dp)),
-                        colors = CardDefaults.cardColors(containerColor = viewModel.currentCardColor)
+                        colors = CardDefaults.cardColors(containerColor = cardColors)
                     ) {
                         Text(
                             modifier = Modifier
@@ -145,7 +156,7 @@ fun GameScreen(navController: NavHostController) {
                         LinearProgressIndicator(progress = animateAction, color = Color.Red)
                         Icon(
                             painter = painterResource(id = R.drawable.run),
-                            tint = viewModel.currentCardColor,
+                            tint = cardColors,
                             contentDescription = "Personnage qui court",
                             modifier = Modifier
                                 .align(Alignment.CenterStart)
@@ -162,9 +173,9 @@ fun GameScreen(navController: NavHostController) {
                         ) {
                             items(answers.size) { idx ->
                                 val correct: Color = if (answers[idx] == question.correctAnswer) {
-                                    validButton
+                                    validB
                                 } else {
-                                    invalidButton
+                                    invalidB
                                 }
                                 Button(
                                     modifier = Modifier
@@ -226,7 +237,7 @@ fun GameScreen(navController: NavHostController) {
                                 ambientColor = Color.Gray
                             ),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = lambdaButton,
+                                containerColor = classicB,
                                 disabledContainerColor = Color.Gray
                             ),
                             onClick = { viewModel.nextQuestion() },

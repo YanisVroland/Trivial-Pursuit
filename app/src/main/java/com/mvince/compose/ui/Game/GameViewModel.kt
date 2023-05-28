@@ -23,6 +23,8 @@ class GameViewModel @Inject constructor(private val questionsRepository: Questio
     var answered = false
     var currentIndex = 0
 
+    private val darkCardColors = listOf<Color>(dpinkTrivial, dpurpleTrivial, dgreenTrivial, dblueTrivial, dyellowTrivial, dorangeTrivial)
+    var darkCurrentCardColor: Color = Color.DarkGray
     private val cardColors = listOf(pinkTrivial, purpleTrivial, greenTrivial, blueTrivial, yellowTrivial, orangeTrivial)
     var currentCardColor: Color = Color.LightGray
 
@@ -57,6 +59,7 @@ class GameViewModel @Inject constructor(private val questionsRepository: Questio
                 _answers.value =
                     question.value?.incorrectAnswers?.plus(question.value!!.correctAnswer)?.shuffled()!!
                 currentCardColor = cardColors.shuffled().first()
+                darkCurrentCardColor = darkCardColors.shuffled().first()
             }
         }
 
@@ -78,6 +81,7 @@ class GameViewModel @Inject constructor(private val questionsRepository: Questio
                 _answers.value =
                     question.value?.incorrectAnswers?.plus(question.value!!.correctAnswer)?.shuffled()!!
                 currentCardColor = cardColors.shuffled().first()
+                darkCurrentCardColor = darkCardColors.shuffled().first()
             }
             _isCorrect.value = null
             answered = false

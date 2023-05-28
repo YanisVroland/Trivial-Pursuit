@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
@@ -22,10 +23,9 @@ import com.mvince.compose.domain.UserFirebase
 import com.mvince.compose.ui.Route
 import com.mvince.compose.ui.components.CustomOutlinedTextField
 import com.mvince.compose.ui.mainPage.MainPageViewModel
-import com.mvince.compose.ui.theme.invalidButton
-import com.mvince.compose.ui.theme.lambdaButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import com.mvince.compose.ui.theme.*
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnrememberedMutableState")
@@ -51,6 +51,14 @@ fun UserBody(navController: NavController) {
     var avatar by remember { mutableStateOf<Int?>(null) }
     var pseudo by remember { mutableStateOf("") }
     var totalScore by remember { mutableStateOf(0) }
+    var validB = validButton
+    var invalidB = invalidButton
+    var classicB = lambdaButton
+    if(isSystemInDarkTheme()){
+        validB = dvalidButton
+        invalidB = dinvalidButton
+        classicB = dlambdaButton
+    }
 
 
     LaunchedEffect(user) {
@@ -82,7 +90,7 @@ fun UserBody(navController: NavController) {
                 modifier = Modifier
                     .size(32.dp)
                     .clip(CircleShape)
-                    .background(lambdaButton)
+                    .background(classicB)
                     .align(Alignment.BottomEnd)
                     .padding(3.dp)
             ) {
@@ -129,7 +137,7 @@ fun UserBody(navController: NavController) {
                 modifier = Modifier
                     .size(32.dp)
                     .clip(CircleShape)
-                    .background(lambdaButton)
+                    .background(classicB)
                     .padding(3.dp)
             ) {
                 IconButton(
@@ -162,7 +170,7 @@ fun UserBody(navController: NavController) {
         Spacer(modifier = Modifier.height(42.dp))
 
         Button(
-            colors = ButtonDefaults.buttonColors(containerColor = lambdaButton),
+            colors = ButtonDefaults.buttonColors(containerColor = classicB),
             enabled = ifModified,
             onClick = {
                 pseudoValid = pseudo.isNotEmpty()
@@ -183,7 +191,7 @@ fun UserBody(navController: NavController) {
                     inclusive = true
                 }
             }
-        }, colors = ButtonDefaults.buttonColors(containerColor = invalidButton)) {
+        }, colors = ButtonDefaults.buttonColors(containerColor = invalidB)) {
             Text("Déconnexion")
         }
         if (updateIsCorrect != null) {

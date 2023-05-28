@@ -7,8 +7,8 @@ import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColorScheme(
     primary = primaryDarkmode,
-    secondary = Color.DarkGray,
-    background = Color.DarkGray,
+    secondary = Color.LightGray,
+    background = darkmodeWallpaper,
     surface = surfaceDarkmode, // surface blanche (par défaut)
     onPrimary = Color.LightGray, // texte blanc sur fond primaire
     onSecondary = Color.DarkGray, // texte noir sur fond secondaire
@@ -22,9 +22,9 @@ private val LightColorPalette = lightColorScheme(
     background = background,
     surface = Color.White, // surface blanche (par défaut)
     onPrimary = Color.White, // texte blanc sur fond primaire
-    onSecondary = Color.Black, // texte noir sur fond secondaire
-    onBackground = Color.Black, // texte noir sur fond de base
-    onSurface = Color.Black // texte noir sur surface
+    onSecondary = Color.LightGray, // texte noir sur fond secondaire
+    onBackground = Color.LightGray, // texte noir sur fond de base
+    onSurface = Color.LightGray // texte noir sur surface
 )
 
 @Composable
