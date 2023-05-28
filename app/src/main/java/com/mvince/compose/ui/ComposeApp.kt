@@ -6,9 +6,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.mvince.compose.ui.Game.GameScreen
 import com.mvince.compose.ui.forgotPassword.ForgotPasswordScreen
 import com.mvince.compose.ui.mainPage.MainPageScreen
-import com.mvince.compose.ui.mainPage.components.GameBody
 import com.mvince.compose.ui.mainPage.components.GameEndBody
 import com.mvince.compose.ui.signin.LoginScreen
 import com.mvince.compose.ui.signup.SignupScreen
@@ -30,31 +30,11 @@ fun ComposeApp() {
         startDestination = startRedirection()
     ) {
         composable(route = Route.MAINPAGE) {MainPageScreen(navController)}
-        composable(route = Route.GAME) {GameBody(navController)}
+        composable(route = Route.GAME) { GameScreen(navController) }
         composable(route = Route.ENDGAME) { GameEndBody(navController)}
         composable(route = Route.LOGIN) { LoginScreen(navController) }
         composable(route = Route.REGISTER) { SignupScreen(navController) }
         composable(route = Route.FORGOTPASSWORD) { ForgotPasswordScreen(navController) }
-        /*composable(route = Route.USER) { backStackEntry ->
-            UsersScreen(
-                onUserClick = { username ->
-                    // In order to discard duplicated navigation events, we check the Lifecycle
-                    if (backStackEntry.lifecycle.currentState == Lifecycle.State.RESUMED) {
-                        navController.navigate("${Route.DETAIL}/$username")
-                    }
-                }
-            )
-        }*/
-        /*composable(
-            route = "${Route.DETAIL}/{${Argument.USERNAME}}",
-            arguments = listOf(
-                navArgument(Argument.USERNAME) {
-                    type = NavType.StringType
-                }
-            ),
-        ) {
-            DetailsScreen(navController)
-        }*/
     }
 }
 

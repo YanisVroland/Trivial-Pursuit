@@ -33,11 +33,6 @@ fun RankingBody() {
     val mainModel = hiltViewModel<MainPageViewModel>()
     val totalScoreList = mainModel.allUsers.collectAsState().value
     val dailyScoreList = mainModel.allUsersDaily.collectAsState().value
-    val TitleModifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 20.dp)
-    val cardModifier = Modifier
-        .fillMaxWidth()
     var colorT = Color.Black
     var colorButtons = primary
     val itemsList = listOf("Global Ranking", "Daily Ranking")
@@ -60,7 +55,9 @@ fun RankingBody() {
     
     Column() {
         Column(
-            modifier = TitleModifier, horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 20.dp), horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Text(
@@ -149,7 +146,8 @@ fun RankingBody() {
         ) {
             items(if(selectedIndex == 0)totalScoreList else dailyScoreList) { score ->
                 ListItem(
-                    modifier = cardModifier,
+                    modifier = Modifier
+                        .fillMaxWidth(),
                     leadingContent = {
                         if(selectedIndex == 0){
                             Text(

@@ -11,8 +11,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.mvince.compose.ui.Game.GameScreen
 import com.mvince.compose.ui.Route
-import com.mvince.compose.ui.mainPage.components.GameBody
 import com.mvince.compose.ui.mainPage.components.GameEndBody
 import com.mvince.compose.ui.mainPage.components.GameStartBody
 import com.mvince.compose.ui.mainPage.components.UserBody
@@ -29,10 +29,10 @@ fun MainPageScreen(navController: NavHostController) {
     val appNavController = rememberNavController()
     val selectedTab = remember { mutableStateOf(Route.STARTGAME) }
 
-    JetpackComposeBoilerplateTheme() {
+    JetpackComposeBoilerplateTheme {
         Scaffold(
             bottomBar = {
-                NavigationBar() {
+                NavigationBar {
                     NavigationBarItem(selected = selectedTab.value == Route.USER,
                         onClick = {
                             selectedTab.value = Route.USER
@@ -83,7 +83,7 @@ fun MainPageScreen(navController: NavHostController) {
                     UserBody(navController = navController)
                 }
                 composable(Route.GAME) {
-                    GameBody(navController = appNavController)
+                    GameScreen(navController = appNavController)
                 }
                 composable(Route.ENDGAME) {
                     GameEndBody(navController = appNavController)
