@@ -150,7 +150,9 @@ fun GameBody(navController: NavController) {
                 )
             }
             Spacer(modifier = Modifier.size(10.dp))
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Box(modifier = Modifier.weight(1f)) {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 items(answers.size) { idx ->
                     val correct: Color = if (answers[idx] == question.correctAnswer) {
                         validButton
@@ -182,7 +184,7 @@ fun GameBody(navController: NavController) {
                         )
                     }
                 }
-            }
+            }}
         }
         if (isCorrect != null) {
             if (isCorrect) {
@@ -228,5 +230,7 @@ fun GameBody(navController: NavController) {
 
             }
         }
+        Spacer(modifier = Modifier.height(50.dp))
+
     }
 }

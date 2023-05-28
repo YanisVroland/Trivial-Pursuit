@@ -6,10 +6,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mvince.compose.domain.UserFirebase
-import com.mvince.compose.repository.QuestionsApiRepository
 import com.mvince.compose.network.model.Result
 import com.mvince.compose.repository.AuthFirebaseRepository
-import com.mvince.compose.repository.QuestionsFirebaseRepository
+import com.mvince.compose.repository.QuestionsRepository
 import com.mvince.compose.repository.UserFirebaseRepository
 import com.mvince.compose.ui.theme.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +19,7 @@ import javax.inject.Inject
 
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
-class MainPageViewModel @Inject constructor(private val questionsFirebaseRepository: QuestionsFirebaseRepository, private val questionsAPIRepository: QuestionsApiRepository, private val repository: AuthFirebaseRepository, private val userFirebaseRepository: UserFirebaseRepository) : ViewModel() {
+class MainPageViewModel @Inject constructor(private val questionsRepository: QuestionsRepository, private val repository: AuthFirebaseRepository, private val userFirebaseRepository: UserFirebaseRepository) : ViewModel() {
 
     private val SCORE_INCREMENT = 10
 
@@ -65,12 +64,12 @@ class MainPageViewModel @Inject constructor(private val questionsFirebaseReposit
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            questionsFirebaseRepository.getDailyQuestions().collect {
+            questionsRepository.getDailyQuestions().collect {
                 if (it != null) {
                     _questions = it.questionsWithAnswers
                 }else {
-                    _questions = questionsAPIRepository.getQuestionsOfDay()
-                    questionsFirebaseRepository.importDailyQuestions(_questions)
+                    _questions = questionsRepository.getQuestionsOfDay()
+                    questionsRepository.importDailyQuestions(_questions)
                 }
                 _question.value = _questions.first()
                 _answers.value =
